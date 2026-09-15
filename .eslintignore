@@ -1,0 +1,7 @@
+dist
+dist_pure
+.vercel
+node_modules
+sw.js
+public
+

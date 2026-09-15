@@ -1,0 +1,43 @@
+{
+    "build": {
+        "env": {
+            "VITE_SUPABASE_URL": "https://kmuovijjgivwupluuruh.supabase.co",
+            "VITE_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttdW92aWpqZ2l2d3VwbHV1cnVoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3MzIwODAsImV4cCI6MjA4NjMwODA4MH0.81BtKuXTM15XuoE5PzWjwCzIwL5WbjQtqhWkMd3t_b4"
+        }
+    },
+    "headers": [
+        {
+            "source": "/assets/(.*)",
+            "headers": [
+                {
+                    "key": "Cache-Control",
+                    "value": "public, max-age=31536000, immutable"
+                }
+            ]
+        },
+        {
+            "source": "/(logo.png|favicon.ico|manifest.webmanifest)",
+            "headers": [
+                {
+                    "key": "Cache-Control",
+                    "value": "public, max-age=86400, stale-while-revalidate=604800"
+                }
+            ]
+        },
+        {
+            "source": "/(sw.js|registerSW.js)",
+            "headers": [
+                {
+                    "key": "Cache-Control",
+                    "value": "public, max-age=0, must-revalidate"
+                }
+            ]
+        }
+    ],
+    "rewrites": [
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
+        }
+    ]
+}
