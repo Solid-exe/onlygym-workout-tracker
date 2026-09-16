@@ -108,44 +108,8 @@ export default function Profile() {
                     </div>
                 )}
                 {userProfile.email && <p className="text-xs text-slate-400 mt-1">{userProfile.email}</p>}
-                <span className="text-xs font-bold bg-primary/10 border border-primary/20 px-3 py-1 rounded-full text-primary mt-2 uppercase tracking-wide">
-                    {userProfile?.role === 'admin' ? '👑 Admin' : (userProfile?.role === 'trainer' || userProfile?.role === 'coach') ? '🏋️ Coach' : 'Pro Member'}
-                </span>
+                <span className="text-xs font-bold bg-primary/10 border border-primary/20 px-3 py-1 rounded-full text-primary mt-2 uppercase tracking-wide">Pro Member</span>
             </div>
-
-            {/* Admin Dashboard Quick Access */}
-            {userProfile?.role === 'admin' && (
-                <div className="mb-6">
-                    <button onClick={() => navigate('/admin')}
-                        className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-4 rounded-2xl flex items-center justify-between shadow-lg shadow-purple-500/20 active:scale-[0.98] transition-all">
-                        <div className="flex items-center gap-3">
-                            <span className="bg-white/20 p-2.5 rounded-xl"><span className="material-symbols-outlined text-xl">admin_panel_settings</span></span>
-                            <div className="text-left">
-                                <h4 className="font-black uppercase italic tracking-tight text-sm">Dashboard Amministratore</h4>
-                                <p className="text-[10px] text-purple-200 font-bold uppercase tracking-wider">Gestisci atleti, schede, broadcast e palestra</p>
-                            </div>
-                        </div>
-                        <span className="material-symbols-outlined text-white/80">chevron_right</span>
-                    </button>
-                </div>
-            )}
-
-            {/* Coach Dashboard Quick Access */}
-            {(userProfile?.role === 'trainer' || userProfile?.role === 'coach') && (
-                <div className="mb-6">
-                    <button onClick={() => navigate('/coach')}
-                        className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white p-4 rounded-2xl flex items-center justify-between shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all">
-                        <div className="flex items-center gap-3">
-                            <span className="bg-white/20 p-2.5 rounded-xl"><span className="material-symbols-outlined text-xl">sports</span></span>
-                            <div className="text-left">
-                                <h4 className="font-black uppercase italic tracking-tight text-sm">Dashboard Coach</h4>
-                                <p className="text-[10px] text-emerald-200 font-bold uppercase tracking-wider">Richieste schede, atleti, video e notifiche</p>
-                            </div>
-                        </div>
-                        <span className="material-symbols-outlined text-white/80">chevron_right</span>
-                    </button>
-                </div>
-            )}
 
             {/* Stats Grid */}
             <div className="grid grid-cols-2 gap-3 mb-8">

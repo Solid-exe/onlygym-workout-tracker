@@ -14,13 +14,7 @@ export default function PlanEditor() {
     const { addPlan, updatePlan, userProfile } = useStore();
 
     const navigateAfterSave = () => {
-        if (userProfile?.role === 'trainer' || userProfile?.role === 'coach') {
-            navigate("/coach");
-        } else if (userProfile?.role === 'admin') {
-            navigate("/admin");
-        } else {
-            navigate("/plans");
-        }
+        navigate("/plans");
     };
 
     const [targetUserId, setTargetUserId] = useState(searchParams.get('userId') || null);

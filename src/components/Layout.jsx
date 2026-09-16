@@ -1,17 +1,10 @@
 import { Outlet, NavLink } from "react-router-dom";
-import { useStore } from "../lib/store";
 
 export default function Layout() {
-    const { userProfile } = useStore();
-    const isStaff = userProfile?.role === 'admin' || userProfile?.role === 'trainer' || userProfile?.role === 'coach';
-
     const navItems = [
         { to: "/", label: "Allenati", icon: "bolt" },
-        ...(userProfile?.role === 'admin' ? [{ to: "/admin", label: "Admin", icon: "admin_panel_settings" }] : []),
-        ...(userProfile?.role === 'trainer' || userProfile?.role === 'coach' ? [{ to: "/coach", label: "Coach", icon: "sports" }] : []),
-        ...(!isStaff ? [{ to: "/plans", label: "Schede", icon: "fitness_center" }] : []),
-        ...(!isStaff ? [{ to: "/progress", label: "Progressi", icon: "monitoring" }] : []),
-        { to: "/community", label: "Community", icon: "groups" },
+        { to: "/plans", label: "Schede", icon: "fitness_center" },
+        { to: "/progress", label: "Progressi", icon: "monitoring" },
         { to: "/profile", label: "Profilo", icon: "account_circle" },
     ];
 

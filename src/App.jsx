@@ -145,7 +145,7 @@ export default function App() {
                     <Route element={<Layout />}>
                         <Route path="/" element={<ErrorBoundary><Home /></ErrorBoundary>} />
                         <Route path="/plans" element={<ErrorBoundary><Plans /></ErrorBoundary>} />
-                        <Route path="/community" element={<ErrorBoundary><Community /></ErrorBoundary>} />
+                        <Route path="/community" element={<Navigate to="/" replace />} />
                         <Route path="/profile" element={<ErrorBoundary><Profile /></ErrorBoundary>} />
                         <Route path="/profile/:userId" element={<ErrorBoundary><UserProfile /></ErrorBoundary>} />
                         <Route path="/history" element={<ErrorBoundary><History /></ErrorBoundary>} />
@@ -162,8 +162,8 @@ export default function App() {
                     <Route path="/progress" element={<ErrorBoundary><Progress /></ErrorBoundary>} />
                     <Route path="/progress/:exerciseName" element={<ErrorBoundary><Progress /></ErrorBoundary>} />
                     <Route path="/battlepass" element={<ErrorBoundary><BattlePass /></ErrorBoundary>} />
-                    <Route path="/admin" element={<ErrorBoundary><AdminDashboard /></ErrorBoundary>} />
-                    <Route path="/coach" element={<ErrorBoundary><CoachDashboard /></ErrorBoundary>} />
+                    <Route path="/admin" element={<Navigate to="/" replace />} />
+                    <Route path="/coach" element={<Navigate to="/" replace />} />
                     <Route path="/notifications" element={<ErrorBoundary><Notifications /></ErrorBoundary>} />
                     <Route path="/workout/active" element={<ErrorBoundary><WorkoutSession /></ErrorBoundary>} />
                     <Route path="/chat" element={<ErrorBoundary><Chat /></ErrorBoundary>} />
