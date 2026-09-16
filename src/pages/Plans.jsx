@@ -62,7 +62,13 @@ export default function Plans() {
                     </h1>
                     <p className="text-xs text-slate-400 font-bold uppercase mt-1">Gestisci i tuoi workout</p>
                 </div>
-                <div className="flex gap-3">
+                <div className="flex gap-2">
+                    <button onClick={() => setShowRequestModal(true)}
+                        className="h-12 px-3.5 rounded-full bg-white border border-slate-200 text-slate-700 font-bold text-xs flex items-center gap-1.5 hover:border-primary/50 hover:text-primary transition-all shadow-sm active:scale-95"
+                        title="Richiedi al Coach">
+                        <span className="material-symbols-outlined text-lg text-primary">sports</span>
+                        <span>Coach</span>
+                    </button>
                     <button onClick={() => navigate('/plans/new')}
                         className="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center hover:bg-primary/90 transition-all shadow-md shadow-primary/20 active:scale-90"
                         title="Nuova Scheda">
@@ -76,11 +82,16 @@ export default function Plans() {
                     <div className="text-center py-12 border-2 border-dashed border-slate-200 rounded-2xl bg-white/50 shadow-sm">
                         <span className="material-symbols-outlined text-slate-300 text-5xl mb-3 block">fitness_center</span>
                         <p className="text-slate-400 font-bold uppercase tracking-widest text-xs mb-4">Nessuna scheda attiva</p>
-                        <div className="flex flex-col gap-3 max-w-[200px] mx-auto">
+                        <div className="flex flex-col gap-2.5 max-w-[220px] mx-auto">
                             <button onClick={() => navigate('/plans/new')}
                                 className="px-4 py-3 bg-primary text-white font-bold uppercase text-xs rounded-xl hover:bg-primary/90 transition-all shadow-md shadow-primary/20 flex items-center justify-center gap-2">
                                 <span className="material-symbols-outlined text-sm">add</span>
                                 <span>Crea Scheda</span>
+                            </button>
+                            <button onClick={() => setShowRequestModal(true)}
+                                className="px-4 py-2.5 bg-white border border-slate-200 text-slate-700 font-bold uppercase text-xs rounded-xl hover:border-primary/40 hover:text-primary transition-all shadow-sm flex items-center justify-center gap-2">
+                                <span className="material-symbols-outlined text-sm text-primary">sports</span>
+                                <span>Richiedi al Coach</span>
                             </button>
                         </div>
                     </div>

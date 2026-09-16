@@ -10,8 +10,18 @@ export default function PlanEditor() {
     const requestId = searchParams.get('requestId');
     const isTemplate = searchParams.get('isTemplate') === 'true';
     const editId = searchParams.get('editId');
-    const editTplId = searchParams.get('editTplId');
+    const editTplId = searchParams.get('editTplId') || searchParams.get('tplId');
     const { addPlan, updatePlan, userProfile } = useStore();
+
+    const navigateAfterSave = () => {
+        if (userProfile?.role === 'trainer' || userProfile?.role === 'coach') {
+            navigate("/coach");
+        } else if (userProfile?.role === 'admin') {
+            navigate("/admin");
+        } else {
+            navigate("/plans");
+        }
+    };
 
     const [targetUserId, setTargetUserId] = useState(searchParams.get('userId') || null);
     const [targetUserName, setTargetUserName] = useState(null);
@@ -140,7 +150,7 @@ export default function PlanEditor() {
                         alert(`Errore aggiornamento template: ${error.message}`);
                     } else {
                         alert(`✅ Modello "${name}" aggiornato!`);
-                        navigate("/admin");
+                        navigateAfterSave();
                     }
                 }
                 return;
@@ -158,7 +168,7 @@ export default function PlanEditor() {
                     alert(`Errore salvataggio template: ${error.message}`);
                 } else {
                     alert(`✅ Modello "${name}" salvato nell'archivio globale!`);
-                    navigate("/admin");
+                    navigateAfterSave();
                 }
             }
             return;
@@ -201,7 +211,7 @@ export default function PlanEditor() {
 
                 if (targetUserId) {
                     alert(`✅ Scheda assegnata a ${assigneeName}!`);
-                    navigate("/admin");
+                    navigateAfterSave();
                 } else {
                     navigate("/plans");
                 }

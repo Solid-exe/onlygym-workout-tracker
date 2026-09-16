@@ -891,7 +891,12 @@ export default function AdminDashboard() {
                                                             <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>emoji_events</span>
                                                         </button>
                                                     )}
-                                                    <button onClick={() => navigate(`/chat`)}
+                                                    <button onClick={() => navigate(`/profile/${client.id}`)}
+                                                        className="w-8 h-8 flex items-center justify-center bg-slate-100 text-slate-500 border border-slate-200 hover:bg-slate-800 hover:text-white hover:border-slate-800 text-xs rounded-lg transition-all shadow-sm hover:shadow-md hover:scale-110 active:scale-90"
+                                                        title="Profilo Atleta">
+                                                        <span className="material-symbols-outlined text-[18px]">account_circle</span>
+                                                    </button>
+                                                    <button onClick={() => navigate(`/chat/${client.id}`)}
                                                         className="w-8 h-8 flex items-center justify-center bg-slate-100 text-slate-500 border border-slate-200 hover:bg-slate-800 hover:text-white hover:border-slate-800 text-xs rounded-lg transition-all shadow-sm hover:shadow-md hover:scale-110 active:scale-90"
                                                         title="Apri Chat">
                                                         <span className="material-symbols-outlined text-[18px]">chat</span>

@@ -88,7 +88,22 @@ export default function PostCard({ post, onLike, onDelete, onFollow, isFollowing
         const newIsLiked = !isLiked;
         setIsLiked(newIsLiked);
         setLocalLikes(prev => newIsLiked ? prev + 1 : prev - 1);
-        if (newIsLiked && post.user_id !== currentUserId && currentUserId) await supabase.from('notifications').insert({ user_id: post.user_id, sender_id: currentUserId, type: 'like' });
+
+        try {
+            if (currentUserId) {
+                if (newIsLiked) {
+                    await supabase.from('post_likes').insert({ post_id: post.id, user_id: currentUserId });
+                    if (post.user_id !== currentUserId) {
+                        await supabase.from('notifications').insert({ user_id: post.user_id, sender_id: currentUserId, type: 'like' });
+                    }
+                } else {
+                    await supabase.from('post_likes').delete().match({ post_id: post.id, user_id: currentUserId });
+                }
+            }
+        } catch (e) {
+            console.error("Like toggle error:", e);
+        }
+
         if (onLike) await onLike(post.id);
         setIsLiking(false);
     };

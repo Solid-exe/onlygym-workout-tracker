@@ -15,7 +15,10 @@ export default function Notifications() {
         if (notif.data?.url) { navigate(notif.data.url); return; }
         if (notif.type === 'like' || notif.type === 'comment') navigate('/community');
         else if (notif.type === 'assign_plan' || notif.type === 'plan_assigned') navigate('/plans');
-        else if (notif.type === 'message') navigate(notif.data?.sender_id ? `/chat/${notif.data.sender_id}` : '/chat');
+        else if (notif.type === 'message') {
+            const senderId = notif.data?.sender_id || notif.sender_id;
+            navigate(senderId ? `/chat/${senderId}` : '/chat');
+        }
     };
 
     const getIconFor = (type) => {

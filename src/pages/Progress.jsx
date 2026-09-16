@@ -27,14 +27,18 @@ export default function Progress() {
         history.forEach(session => {
             const exercise = session.exercises?.find(ex => ex.name === selectedExercise);
             if (!exercise || !exercise.setsData) return;
-            const maxWeight = Math.max(...exercise.setsData.filter(s => s.done && s.kg).map(s => parseInt(s.kg) || 0));
-            const volume = exercise.setsData.filter(s => s.done && s.kg && s.reps).reduce((acc, s) => acc + (parseInt(s.kg) * parseInt(s.reps)), 0);
+            const validDoneSets = exercise.setsData.filter(s => s.done && s.kg);
+            const weights = validDoneSets.map(s => parseFloat(s.kg) || 0);
+            const maxWeight = weights.length > 0 ? Math.max(...weights) : 0;
+            const volume = exercise.setsData.filter(s => s.done && s.kg && s.reps).reduce((acc, s) => acc + ((parseFloat(s.kg) || 0) * (parseInt(s.reps) || 0)), 0);
             if (maxWeight > 0 || volume > 0) {
-                const maxReps = Math.max(...exercise.setsData.filter(s => s.done).map(s => parseInt(s.reps) || 0));
+                const repSets = exercise.setsData.filter(s => s.done).map(s => parseInt(s.reps) || 0);
+                const maxReps = repSets.length > 0 ? Math.max(...repSets) : 0;
                 data.push({
                     date: new Date(session.startedAt || session.date).toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit' }),
-                    weight: maxWeight === -Infinity ? 0 : maxWeight, volume,
-                    reps: maxReps === -Infinity ? 0 : maxReps,
+                    weight: maxWeight,
+                    volume: Math.round(volume),
+                    reps: maxReps,
                     timestamp: new Date(session.startedAt || session.date).getTime()
                 });
             }

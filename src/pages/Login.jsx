@@ -79,6 +79,7 @@ export default function Login() {
                     email: data.user.email,
                     phone: profile?.phone || '',
                     avatar_url: profile?.avatar_url,
+                    role: profile?.role || 'client',
                     training_days_goal: profile?.training_days_goal || 3,
                     streak: profile?.streak || 0,
                     workouts_completed: profile?.workouts_completed || 0,

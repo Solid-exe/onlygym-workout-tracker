@@ -241,6 +241,7 @@ export const useStore = create(
                         email: user.email || "",
                         phone: user.phone || "",
                         avatarUrl: user.avatar_url || null,
+                        role: user.role || 'client',
                         trainingDaysGoal: user.training_days_goal || 3,
                         streak: user.streak || 0,
                         workoutsCompleted: user.workouts_completed || 0,
@@ -689,7 +690,7 @@ export const useStore = create(
                     const totalReps = session.exercises.reduce((acc, ex) =>
                         acc + ex.setsData.filter(s => s.done).reduce((sAcc, s) => sAcc + (parseInt(s.reps) || 0), 0), 0);
                     const totalTonnage = session.exercises.reduce((acc, ex) =>
-                        acc + ex.setsData.filter(s => s.done).reduce((sAcc, s) => sAcc + ((parseInt(s.kg) || 0) * (parseInt(s.reps) || 0)), 0), 0);
+                        acc + ex.setsData.filter(s => s.done).reduce((sAcc, s) => sAcc + ((parseFloat(s.kg) || 0) * (parseInt(s.reps) || 0)), 0), 0);
                     const totalSets = session.exercises.reduce((acc, ex) =>
                         acc + ex.setsData.filter(s => s.done).length, 0);
 

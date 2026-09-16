@@ -235,7 +235,7 @@ export default function Community() {
                     </button>
                     <button 
                         onClick={() => setView('leaderboard')}
-                        className={`hidden sm:flex flex-1 py-2 text-xs font-bold uppercase rounded-lg transition-all items-center justify-center gap-1 ${view === 'leaderboard' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                        className={`flex-1 py-2 text-xs font-bold uppercase rounded-lg transition-all flex items-center justify-center gap-1 ${view === 'leaderboard' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
                     >
                         <span className="material-symbols-outlined text-base" style={{ fontVariationSettings: "'FILL' 1" }}>emoji_events</span> Classifica
                     </button>

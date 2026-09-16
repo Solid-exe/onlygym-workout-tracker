@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useStore } from "../lib/store";
 import { supabase } from "../lib/supabase";
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://kmuovijjgivwupluuruh.supabase.co';
 
 export default function Certificate() {
     const navigate = useNavigate();
