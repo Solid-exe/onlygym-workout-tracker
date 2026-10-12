@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { playRewardSound, getEquippedCustomizations } from '../services/customization';
 
 export default function RecoveryTimer({ trigger = null }) {
     const [timeLeft, setTimeLeft] = useState(null);
@@ -25,29 +26,9 @@ export default function RecoveryTimer({ trigger = null }) {
 
     const playAlarm = () => {
         if (isMuted) return;
-
-        // Simple Beep via Web Audio API (no external file needed)
         try {
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            if (!audioContextRef.current) {
-                audioContextRef.current = new AudioContext();
-            }
-            const ctx = audioContextRef.current;
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(880, ctx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.5);
-
-            gain.gain.setValueAtTime(0.5, ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-
-            osc.start();
-            osc.stop(ctx.currentTime + 0.5);
+            const soundType = getEquippedCustomizations().sound;
+            playRewardSound(soundType);
         } catch (e) {
             console.error("Audio error", e);
         }

@@ -36,6 +36,7 @@ import { useStore } from "./lib/store";
 import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
 import { admobService } from "./services/admob";
+import { applyEquippedTheme } from "./services/customization";
 
 export default function App() {
     const [showSplash, setShowSplash] = useState(true);
@@ -45,6 +46,11 @@ export default function App() {
     useEffect(() => {
         // Inizializza Google AdMob
         admobService.initialize();
+        // Applica tema sbloccato dal Battle Pass
+        applyEquippedTheme();
+        const handleCustomization = () => applyEquippedTheme();
+        window.addEventListener("onlygym:customization-changed", handleCustomization);
+        return () => window.removeEventListener("onlygym:customization-changed", handleCustomization);
     }, []);
 
     useEffect(() => {

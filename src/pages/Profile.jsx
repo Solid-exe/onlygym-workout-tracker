@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useStore } from "../lib/store";
 import { supabase } from "../lib/supabase";
 import { admobService } from "../services/admob";
+import { getEquippedCustomizations, getAvatarFrameClass } from "../services/customization";
 
 export default function Profile() {
     const navigate = useNavigate();
@@ -12,7 +13,14 @@ export default function Profile() {
     const [newName, setNewName] = useState(userProfile.name);
     const [uploadingAvatar, setUploadingAvatar] = useState(false);
     const [isAdFree, setIsAdFree] = useState(admobService.isUserAdFree());
+    const [customizations, setCustomizations] = useState(getEquippedCustomizations());
     const fileInputRef = useRef(null);
+
+    useEffect(() => {
+        const handleCustomization = () => setCustomizations(getEquippedCustomizations());
+        window.addEventListener('onlygym:customization-changed', handleCustomization);
+        return () => window.removeEventListener('onlygym:customization-changed', handleCustomization);
+    }, []);
 
     useEffect(() => {
         const handleAdFreeChange = (e) => {
@@ -85,7 +93,7 @@ export default function Profile() {
 
             {/* Header Profile */}
             <div className="flex flex-col items-center mb-8">
-                <div className="w-24 h-24 rounded-full bg-white border-2 border-primary mb-4 relative overflow-hidden flex items-center justify-center shadow-lg shadow-primary/10 group cursor-pointer"
+                <div className={`w-24 h-24 rounded-full bg-white mb-4 relative overflow-hidden flex items-center justify-center shadow-lg shadow-primary/10 group cursor-pointer transition-all ${getAvatarFrameClass(customizations.frame)}`}
                     onClick={handleAvatarClick}>
                     {uploadingAvatar ? (
                         <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full" />
@@ -116,8 +124,19 @@ export default function Profile() {
                         </button>
                     </div>
                 )}
-                {userProfile.email && <p className="text-xs text-slate-400 mt-1">{userProfile.email}</p>}
-                <span className="text-xs font-bold bg-primary/10 border border-primary/20 px-3 py-1 rounded-full text-primary mt-2 uppercase tracking-wide">Pro Member</span>
+                {userProfile.email && <p className="text-xs text-slate-400 mt-0.5">{userProfile.email}</p>}
+                
+                <div className="flex items-center gap-2 mt-2.5">
+                    <span className="text-[11px] font-black uppercase tracking-wider text-amber-500 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
+                        <span className="material-symbols-outlined text-[13px]" style={{ fontVariationSettings: "'FILL' 1" }}>military_tech</span> {customizations.title}
+                    </span>
+                    <button 
+                        onClick={() => navigate('/battlepass')}
+                        className="text-[10px] font-bold uppercase tracking-wider text-violet-600 bg-violet-50 hover:bg-violet-100 border border-violet-200 px-2.5 py-1 rounded-full flex items-center gap-1 transition-colors"
+                    >
+                        <span className="material-symbols-outlined text-[12px]">trophy</span> Battle Pass
+                    </button>
+                </div>
             </div>
 
             {/* Stats Grid */}
