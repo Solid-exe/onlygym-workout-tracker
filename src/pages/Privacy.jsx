@@ -35,14 +35,7 @@ Per qualsiasi richiesta relativa al trattamento dei tuoi dati personali puoi con
 **Dati di Utilizzo dell'App:**
 • Schede di allenamento create
 • Storico allenamenti e progressi
-• Preferenze e impostazioni
-
-**Certificato Medico (Dati Sanitari):**
-• Immagine o file PDF del certificato
-• Dati contenuti nel certificato (idoneità sportiva)
-• Data di scadenza del certificato
-
-I dati relativi alla salute sono trattati con misure di sicurezza rafforzate in conformità all'art. 9 del GDPR.`
+• Preferenze e impostazioni`
         },
         {
             id: 3,
@@ -53,14 +46,9 @@ I dati relativi alla salute sono trattati con misure di sicurezza rafforzate in 
 **Esecuzione del Contratto (Art. 6.1.b GDPR):**
 Il trattamento dei dati dell'account e di utilizzo è necessario per fornirti il servizio di tracciamento allenamenti.
 
-**Trattamento Dati Sanitari (Art. 9 GDPR):**
-Per il certificato medico, il trattamento avviene:
-• Su base di **obbligo normativo** se richiesto dalla legge per l'accesso in palestra
-• Su base di **consenso esplicito** dell'interessato negli altri casi
-
 **Principi GDPR Applicati:**
 • **Minimizzazione**: Raccogliamo solo i dati strettamente necessari
-• **Riservatezza**: I dati sanitari sono protetti con crittografia
+• **Riservatezza**: I tuoi dati sono protetti con standard crittografici moderni
 • **Limitazione della conservazione**: I dati vengono eliminati quando non più necessari`
         },
         {
@@ -74,11 +62,6 @@ Conservati per tutta la durata del rapporto contrattuale e per i 10 anni success
 
 **Dati di Utilizzo:**
 Conservati fino alla cancellazione dell'account da parte dell'utente.
-
-**Certificato Medico:**
-• Conservato fino alla data di scadenza indicata
-• Automaticamente segnalato come scaduto dopo tale data
-• L'utente può eliminarlo in qualsiasi momento
 
 **Diritto alla Cancellazione:**
 Puoi richiedere la cancellazione dei tuoi dati in qualsiasi momento dalla sezione Privacy dell'app. La cancellazione sarà effettuata entro 30 giorni, salvo obblighi di legge.`

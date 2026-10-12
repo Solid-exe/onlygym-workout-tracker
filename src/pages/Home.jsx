@@ -8,13 +8,6 @@ export default function Home() {
     const navigate = useNavigate();
     const { userProfile, plans, startWorkout, history, authToken, notifications, isHealthConnected, healthData } = useStore();
     const [currentUserId, setCurrentUserId] = useState(null);
-    const [isCertBannerVisible, setIsCertBannerVisible] = useState(() => {
-        try {
-            return !sessionStorage.getItem('cert-dismissed');
-        } catch {
-            return false;
-        }
-    });
     const [showFeedback, setShowFeedback] = useState(false);
     const unreadCount = Array.isArray(notifications) ? notifications.filter(n => !n.read).length : 0;
 
@@ -88,32 +81,6 @@ export default function Home() {
                     </button>
                 </div>
             </header>
-
-            {/* Certificate Banner */}
-            {!userProfile.certificate_uploaded && isCertBannerVisible && (
-                <div className="mx-6 mb-4 bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3 relative">
-                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-amber-500 rounded-l-xl"></div>
-                    <span className="material-symbols-outlined text-amber-600 shrink-0 mt-0.5">warning</span>
-                    <div className="flex-1">
-                        <h3 className="text-sm font-bold text-amber-700 mb-1">Certificato Mancante</h3>
-                        <p className="text-xs text-amber-600 mb-2 leading-relaxed">
-                            Ricordati di caricare il certificato medico per accedere alla palestra.
-                        </p>
-                        <button
-                            onClick={() => navigate('/certificate')}
-                            className="text-xs font-bold text-amber-700 bg-amber-100 px-3 py-1.5 rounded-lg border border-amber-300 hover:bg-amber-200 transition-colors"
-                        >
-                            Carica documento
-                        </button>
-                    </div>
-                    <button
-                        onClick={() => setIsCertBannerVisible(false)}
-                        className="text-amber-400 hover:text-amber-600 p-1 transition-colors"
-                    >
-                        <span className="material-symbols-outlined text-sm">close</span>
-                    </button>
-                </div>
-            )}
 
             {/* Main Content */}
             <main className="flex-1 px-6 pb-24">

@@ -7,7 +7,7 @@ import { admobService } from "../services/admob";
 
 export default function Profile() {
     const navigate = useNavigate();
-    const { userProfile, medicalCertificate, logout, updateProfile, badges, history } = useStore();
+    const { userProfile, logout, updateProfile, badges, history } = useStore();
     const [isEditingName, setIsEditingName] = useState(false);
     const [newName, setNewName] = useState(userProfile.name);
     const [uploadingAvatar, setUploadingAvatar] = useState(false);
@@ -75,7 +75,6 @@ export default function Profile() {
     const menuItems = [
         { icon: 'settings', label: "Impostazioni Generali", to: "/settings" },
         { icon: 'shield', label: "Privacy & Sicurezza", to: "/privacy" },
-        { icon: 'description', label: "Certificato Medico", to: "/certificate", badge: !medicalCertificate.uploaded ? "!" : null },
         { icon: 'calendar_month', label: "Storico Allenamenti", to: "/history" },
         { icon: 'trending_up', label: "Progressione", to: "/progress" },
         { icon: 'emoji_events', label: "Badge & Traguardi", to: "/badges", badge: badges.length > 0 ? badges.length : null },

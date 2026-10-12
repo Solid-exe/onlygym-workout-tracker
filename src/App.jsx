@@ -8,7 +8,6 @@ import UserProfile from "./pages/UserProfile";
 import Settings from "./pages/Settings";
 import Analysis from "./pages/Analysis";
 import Privacy from "./pages/Privacy";
-import Certificate from "./pages/Certificate";
 import History from "./pages/History";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
@@ -161,7 +160,7 @@ export default function App() {
                     <Route path="/plans/new" element={<ErrorBoundary><PlanEditor /></ErrorBoundary>} />
                     <Route path="/settings" element={<ErrorBoundary><Settings /></ErrorBoundary>} />
                     <Route path="/privacy" element={<Privacy />} />
-                    <Route path="/certificate" element={<ErrorBoundary><Certificate /></ErrorBoundary>} />
+                    <Route path="/certificate" element={<Navigate to="/" replace />} />
                     <Route path="/badges" element={<ErrorBoundary><Badges /></ErrorBoundary>} />
                     <Route path="/analysis" element={<ErrorBoundary><Analysis /></ErrorBoundary>} />
                     <Route path="/progress" element={<ErrorBoundary><Progress /></ErrorBoundary>} />
