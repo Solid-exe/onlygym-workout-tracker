@@ -36,11 +36,17 @@ import GymCodeSetup from "./pages/GymCodeSetup";
 import { useStore } from "./lib/store";
 import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
+import { admobService } from "./services/admob";
 
 export default function App() {
     const [showSplash, setShowSplash] = useState(true);
     const [showChangelog, setShowChangelog] = useState(false);
     const { fetchUserData, fetchNotifications, isDarkMode } = useStore();
+
+    useEffect(() => {
+        // Inizializza Google AdMob
+        admobService.initialize();
+    }, []);
 
     useEffect(() => {
         try {

@@ -1,8 +1,9 @@
 import { saveAs } from 'file-saver';
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../lib/store";
 import { supabase } from "../lib/supabase";
+import { admobService } from "../services/admob";
 
 export default function Profile() {
     const navigate = useNavigate();
@@ -10,7 +11,16 @@ export default function Profile() {
     const [isEditingName, setIsEditingName] = useState(false);
     const [newName, setNewName] = useState(userProfile.name);
     const [uploadingAvatar, setUploadingAvatar] = useState(false);
+    const [isAdFree, setIsAdFree] = useState(admobService.isUserAdFree());
     const fileInputRef = useRef(null);
+
+    useEffect(() => {
+        const handleAdFreeChange = (e) => {
+            setIsAdFree(e.detail.isAdFree);
+        };
+        window.addEventListener('onlygym:ad-free-changed', handleAdFreeChange);
+        return () => window.removeEventListener('onlygym:ad-free-changed', handleAdFreeChange);
+    }, []);
 
     const handleExport = () => {
         try {
@@ -112,7 +122,7 @@ export default function Profile() {
             </div>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-2 gap-3 mb-8">
+            <div className="grid grid-cols-2 gap-3 mb-4">
                 <div className="bg-white border border-slate-100 p-4 rounded-xl flex flex-col items-center justify-center text-center shadow-sm">
                     <span className="text-2xl font-black text-slate-900">{userProfile.workoutsCompleted}</span>
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">Workout</span>
@@ -121,6 +131,62 @@ export default function Profile() {
                     <span className="text-2xl font-black text-slate-900">{userProfile.trainingDaysGoal}</span>
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">Giorni/Sett</span>
                 </div>
+            </div>
+
+            {/* Banner Monetizzazione: Rimuovi Pubblicità */}
+            <div className="mb-8">
+                {isAdFree ? (
+                    <div className="bg-emerald-500/10 border border-emerald-500/30 p-4 rounded-2xl flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <span className="material-symbols-outlined text-emerald-500 text-2xl">verified</span>
+                            <div>
+                                <h4 className="text-sm font-black text-slate-900 dark:text-white">Versione Senza Pubblicità</h4>
+                                <p className="text-xs text-slate-500">Grazie per aver sostenuto OnlyGym!</p>
+                            </div>
+                        </div>
+                        <span className="text-[10px] font-extrabold uppercase bg-emerald-500 text-slate-950 px-2.5 py-1 rounded-full">Attivo</span>
+                    </div>
+                ) : (
+                    <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-950 text-white p-4 rounded-2xl shadow-lg border border-white/10 flex flex-col gap-3">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                                <span className="material-symbols-outlined text-primary text-xl">block</span>
+                                <span className="text-xs font-black uppercase tracking-wider text-primary">Zero Interruzioni</span>
+                            </div>
+                            <span className="text-xs font-black bg-primary/20 text-primary border border-primary/30 px-2 py-0.5 rounded-full">1,99 € una tantum</span>
+                        </div>
+                        <div>
+                            <h4 className="text-sm font-bold text-white">Rimuovi Pubblicità per Sempre</h4>
+                            <p className="text-xs text-slate-300 mt-0.5">Naviga e allenati senza annunci pubblicitari e supporta lo sviluppo dell'app.</p>
+                        </div>
+                        <div className="flex gap-2 mt-1">
+                            <button
+                                onClick={() => {
+                                    // Simulazione acquisto e attivazione stato No-Ads
+                                    // Quando collegato al Play Store Billing, qui viene richiamata la query di acquisto
+                                    const confirmPurchase = window.confirm("Desideri sbloccare OnlyGym Senza Pubblicità per 1,99 €?");
+                                    if (confirmPurchase) {
+                                        admobService.setAdFreeStatus(true);
+                                        alert("Grazie! Le pubblicità sono state rimosse per sempre.");
+                                    }
+                                }}
+                                className="flex-1 bg-primary hover:bg-primary-hover text-slate-950 font-black text-xs py-2.5 rounded-xl transition-all shadow-md active:scale-95 text-center"
+                            >
+                                Sblocca No-Ads (1,99 €)
+                            </button>
+                            <button
+                                onClick={() => {
+                                    // Ripristina acquisti
+                                    admobService.setAdFreeStatus(true);
+                                    alert("Acquisto ripristinato con successo!");
+                                }}
+                                className="px-3 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs py-2.5 rounded-xl transition-all text-center"
+                            >
+                                Ripristina
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Stats & Data */}

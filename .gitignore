@@ -15,3 +15,10 @@ dist_pure/
 .DS_Store
 Thumbs.db
 *.log
+
+# Android build and caches
+android/.gradle/
+android/app/build/
+android/build/
+android/release/
+android/.idea/

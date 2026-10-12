@@ -14,7 +14,6 @@ export default function WorkoutSession() {
     const [autoTimerTrigger, setAutoTimerTrigger] = useState(null);
     const [videoModalOpen, setVideoModalOpen] = useState(false);
     const [currentVideo, setCurrentVideo] = useState(null);
-    const [showFeelingModal, setShowFeelingModal] = useState(false);
     const [showShareModal, setShowShareModal] = useState(false);
     const [finishedWorkout, setFinishedWorkout] = useState(null);
     const [isFinishing, setIsFinishing] = useState(false);
@@ -27,8 +26,6 @@ export default function WorkoutSession() {
         currentWeight: 0,
         alternatives: []
     });
-
-    // ... (rest of useEffects remain same) ...
 
     // Sync timer on load/refresh
     useEffect(() => {
@@ -46,27 +43,21 @@ export default function WorkoutSession() {
         return () => clearInterval(interval);
     }, []);
 
-    // Redirect to home if no active workout (and not sharing/rating)
+    // Redirect to home if no active workout (and not sharing)
     useEffect(() => {
-        if (!activeWorkout && !showShareModal && !isFinishing && !showFeelingModal) navigate("/");
-    }, [activeWorkout, navigate, showShareModal, isFinishing, showFeelingModal]);
+        if (!activeWorkout && !showShareModal && !isFinishing) navigate("/");
+    }, [activeWorkout, navigate, showShareModal, isFinishing]);
 
-    const handleFinish = () => {
-        setShowFeelingModal(true);
-    };
-
-    const submitFinish = async (feeling) => {
-        setShowFeelingModal(false);
+    const handleFinish = async () => {
         try {
             setIsFinishing(true);
             const summary = {
                 ...activeWorkout,
                 completedAt: new Date().toISOString(),
                 duration: timerValue / 60,
-                difficulty: feeling
             };
             setFinishedWorkout(summary);
-            await finishWorkout(feeling);
+            await finishWorkout();
             setShowShareModal(true);
             setIsFinishing(false);
         } catch (error) {
@@ -350,7 +341,16 @@ export default function WorkoutSession() {
                     </div>
                 ))}
 
-                <div className="h-12"></div> {/* Spacer */}
+                {/* Big Finish Button at Bottom */}
+                <div className="pt-4 pb-12">
+                    <button
+                        onClick={handleFinish}
+                        className="w-full py-4 rounded-2xl bg-primary text-slate-950 font-black text-sm uppercase tracking-wider shadow-lg shadow-primary/25 hover:bg-primary/90 active:scale-95 transition-all flex items-center justify-center gap-2"
+                    >
+                        <span className="material-symbols-outlined text-[20px]">flag</span>
+                        Termina Allenamento
+                    </button>
+                </div>
             </div>
 
             {/* MODALS & OVERLAYS */}
@@ -386,33 +386,6 @@ export default function WorkoutSession() {
                     workout={finishedWorkout}
                     onClose={handleCloseShare}
                 />
-            )}
-
-            {/* Feeling/Rating Modal */}
-            {showFeelingModal && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 animate-in fade-in" onClick={() => setShowFeelingModal(false)}>
-                    <div className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl animate-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
-                        <div className="text-center mb-8">
-                            <span className="material-symbols-outlined text-[48px] text-primary mb-2">vital_signs</span>
-                            <h2 className="text-2xl font-black italic uppercase tracking-tighter text-slate-900">Com&apos;è andata?</h2>
-                            <p className="text-slate-500 text-xs font-bold mt-2 uppercase tracking-widest">Il feedback aiuta il tuo Coach a calibrare i pesi</p>
-                        </div>
-                        <div className="flex flex-col gap-4">
-                            <button onClick={() => submitFinish('facile')} className="bg-green-50 border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-700 font-black uppercase text-sm py-4 rounded-xl transition-all flex items-center justify-center gap-2 active:scale-95 shadow-sm group">
-                                <span className="text-xl">🟢</span> Facile (RPE basso)
-                            </button>
-                            <button onClick={() => submitFinish('giusto')} className="bg-amber-50 border-2 border-amber-200 hover:bg-amber-500 hover:text-white hover:border-amber-500 text-amber-700 font-black uppercase text-sm py-4 rounded-xl transition-all flex items-center justify-center gap-2 active:scale-95 shadow-sm group">
-                                <span className="text-xl">🟡</span> Giusto / Sfidante
-                            </button>
-                            <button onClick={() => submitFinish('estremo')} className="bg-red-50 border-2 border-red-200 hover:bg-red-600 hover:text-white hover:border-red-600 text-red-700 font-black uppercase text-sm py-4 rounded-xl transition-all flex items-center justify-center gap-2 active:scale-95 shadow-sm group">
-                                <span className="text-xl">🔴</span> Estremo (Al limite)
-                            </button>
-                        </div>
-                        <button onClick={() => setShowFeelingModal(false)} className="w-full mt-6 text-slate-400 font-bold text-xs uppercase tracking-widest hover:text-slate-600 transition-colors">
-                            Annulla
-                        </button>
-                    </div>
-                </div>
             )}
 
         </div>

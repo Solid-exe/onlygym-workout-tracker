@@ -100,17 +100,32 @@ export default function StoryPreviewModal({ open, onClose, workoutData, chartDat
                     {/* Questo è il nodo renderizzato */}
                     <div
                         ref={storyRef}
-                        className="absolute inset-0 bg-[#080c15] flex flex-col p-8 overflow-hidden text-white"
-                        style={{ width: "1080px", height: "1920px", transformOrigin: "top left", transform: "scale(0.3148)" }}
+                        className="absolute inset-0 flex flex-col p-8 overflow-hidden select-none"
+                        style={{
+                            width: "1080px",
+                            height: "1920px",
+                            backgroundColor: "#080c15",
+                            color: "#ffffff",
+                            transformOrigin: "top left",
+                            transform: "scale(0.3148)"
+                        }}
                     >
                         {/* Decorazioni Sfondo */}
-                        <div className="absolute -top-[200px] -right-[200px] w-[800px] h-[800px] bg-emerald-500/20 rounded-full blur-[150px]"></div>
-                        <div className="absolute -bottom-[200px] -left-[200px] w-[800px] h-[800px] bg-violet-600/25 rounded-full blur-[150px]"></div>
+                        <div
+                            className="absolute -top-[200px] -right-[200px] w-[800px] h-[800px] rounded-full blur-[150px]"
+                            style={{ backgroundColor: "rgba(13, 242, 137, 0.22)" }}
+                        />
+                        <div
+                            className="absolute -bottom-[200px] -left-[200px] w-[800px] h-[800px] rounded-full blur-[150px]"
+                            style={{ backgroundColor: "rgba(99, 102, 241, 0.25)" }}
+                        />
 
                         {/* Top / App Logo */}
                         <div className="flex items-center gap-4 mt-12 z-10 w-full relative">
-                            <span className="material-symbols-outlined text-[64px] text-emerald-400">fitness_center</span>
-                            <span className="font-black text-[48px] uppercase tracking-wider text-white">ONLY<span className="text-emerald-400">GYM</span></span>
+                            <span className="material-symbols-outlined text-[64px]" style={{ color: "#0df289" }}>fitness_center</span>
+                            <span className="font-black text-[48px] uppercase tracking-wider" style={{ color: "#ffffff" }}>
+                                ONLY<span style={{ color: "#0df289" }}>GYM</span>
+                            </span>
                         </div>
 
                         {/* Contenuto Centrale Dinamico */}
@@ -118,50 +133,115 @@ export default function StoryPreviewModal({ open, onClose, workoutData, chartDat
                             {workoutData ? (
                                 // LAYOUT: WORKOUT FINITO
                                 <div className="text-center w-full">
-                                    <div className="inline-flex flex-col items-center justify-center p-12 border-[6px] border-emerald-400/40 bg-slate-900/95 rounded-[4rem] backdrop-blur-xl mb-12 shadow-2xl">
-                                        <span className="material-symbols-outlined text-[140px] text-emerald-400 mb-6 drop-shadow-[0_0_30px_rgba(16,185,129,0.5)]" style={{ fontVariationSettings: "'FILL' 1" }}>local_fire_department</span>
-                                        <h2 className="text-[100px] font-black italic tracking-tighter text-white uppercase leading-none drop-shadow-xl">{workoutData.name}</h2>
-                                        <div className="text-[42px] font-black text-slate-950 mt-6 uppercase tracking-widest bg-emerald-400 px-10 py-4 rounded-full shadow-[0_0_25px_rgba(52,211,153,0.6)]">
+                                    <div
+                                        className="inline-flex flex-col items-center justify-center p-12 rounded-[4rem] mb-12 shadow-2xl"
+                                        style={{
+                                            backgroundColor: "#0f172a",
+                                            border: "6px solid rgba(13, 242, 137, 0.45)",
+                                            boxShadow: "0 20px 70px rgba(0, 0, 0, 0.9)"
+                                        }}
+                                    >
+                                        <span
+                                            className="material-symbols-outlined text-[140px] mb-6"
+                                            style={{
+                                                color: "#0df289",
+                                                fontVariationSettings: "'FILL' 1",
+                                                filter: "drop-shadow(0 0 30px rgba(13, 242, 137, 0.6))"
+                                            }}
+                                        >
+                                            local_fire_department
+                                        </span>
+                                        <h2
+                                            className="text-[100px] font-black italic tracking-tighter uppercase leading-none"
+                                            style={{ color: "#ffffff", textShadow: "0 4px 20px rgba(0, 0, 0, 0.8)" }}
+                                        >
+                                            {workoutData.name}
+                                        </h2>
+                                        <div
+                                            className="text-[42px] font-black mt-6 uppercase tracking-widest px-10 py-4 rounded-full"
+                                            style={{
+                                                backgroundColor: "#0df289",
+                                                color: "#080b11",
+                                                boxShadow: "0 0 25px rgba(13, 242, 137, 0.6)"
+                                            }}
+                                        >
                                             Workout Completato ✓
                                         </div>
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-8 px-8">
-                                        <div className="bg-slate-900/95 border-[5px] border-slate-700/80 p-10 rounded-[3.5rem] text-center shadow-xl">
-                                            <p className="text-[34px] text-slate-200 font-black uppercase tracking-widest mb-2">Durata</p>
-                                            <p className="text-[72px] font-black text-white">{formatTime(workoutData.duration)}</p>
+                                        <div
+                                            className="p-10 rounded-[3.5rem] text-center"
+                                            style={{
+                                                backgroundColor: "#0f172a",
+                                                border: "5px solid rgba(56, 189, 248, 0.4)",
+                                                boxShadow: "0 20px 50px rgba(0, 0, 0, 0.8)"
+                                            }}
+                                        >
+                                            <p className="text-[34px] font-black uppercase tracking-widest mb-2" style={{ color: "#94a3b8" }}>Durata</p>
+                                            <p className="text-[72px] font-black" style={{ color: "#ffffff" }}>{formatTime(workoutData.duration)}</p>
                                         </div>
-                                        <div className="bg-slate-900/95 border-[5px] border-emerald-500/40 p-10 rounded-[3.5rem] text-center shadow-xl">
-                                            <p className="text-[34px] text-emerald-300 font-black uppercase tracking-widest mb-2">Volume</p>
-                                            <p className="text-[72px] font-black text-emerald-400">{workoutData.totalVolume} <span className="text-[36px]">kg</span></p>
+                                        <div
+                                            className="p-10 rounded-[3.5rem] text-center"
+                                            style={{
+                                                backgroundColor: "#0f172a",
+                                                border: "5px solid rgba(13, 242, 137, 0.4)",
+                                                boxShadow: "0 20px 50px rgba(0, 0, 0, 0.8)"
+                                            }}
+                                        >
+                                            <p className="text-[34px] font-black uppercase tracking-widest mb-2" style={{ color: "#6ee7b7" }}>Volume</p>
+                                            <p className="text-[72px] font-black" style={{ color: "#0df289" }}>{workoutData.totalVolume} <span className="text-[36px]" style={{ color: "#94a3b8" }}>kg</span></p>
                                         </div>
                                     </div>
 
                                     {workoutData.prCount > 0 && (
-                                        <div className="mt-10 bg-amber-500/20 border-4 border-amber-400/50 p-8 rounded-[3rem] shadow-xl text-center flex items-center justify-center gap-4">
+                                        <div
+                                            className="mt-10 p-8 rounded-[3rem] text-center flex items-center justify-center gap-4"
+                                            style={{
+                                                backgroundColor: "rgba(245, 158, 11, 0.2)",
+                                                border: "4px solid rgba(245, 158, 11, 0.5)",
+                                                boxShadow: "0 10px 40px rgba(0, 0, 0, 0.5)"
+                                            }}
+                                        >
                                             <span className="text-[64px]">🏆</span>
-                                            <p className="text-[48px] font-black text-amber-400 uppercase tracking-tight">
+                                            <p className="text-[48px] font-black uppercase tracking-tight" style={{ color: "#fbbf24" }}>
                                                 {workoutData.prCount} Record Infranti
                                             </p>
                                         </div>
                                     )}
                                 </div>
                             ) : chartData ? (
-                                // LAYOUT: PROGRESSO CHARTA (MOCKUP PER PROGRESS.JSX)
+                                // LAYOUT: PROGRESSO CARTA
                                 <div className="text-center w-full">
-                                    <h2 className="text-[80px] font-black italic tracking-tighter text-white uppercase leading-tight px-12 mb-4">
+                                    <h2 className="text-[80px] font-black italic tracking-tighter uppercase leading-tight px-12 mb-4" style={{ color: "#ffffff" }}>
                                         {chartData.exerciseName}
                                     </h2>
-                                    <div className="text-[38px] font-black text-emerald-400 mb-10 uppercase tracking-widest flex justify-center items-center gap-4">
+                                    <div className="text-[38px] font-black mb-10 uppercase tracking-widest flex justify-center items-center gap-4" style={{ color: "#0df289" }}>
                                         <span className="material-symbols-outlined text-[48px]">trending_up</span> Nuovo Record Personale
                                     </div>
 
-                                    <div className="bg-slate-900/95 border-[6px] border-emerald-400/40 p-14 rounded-[4rem] text-center shadow-2xl relative overflow-hidden backdrop-blur-xl">
-                                        <p className="text-[40px] text-slate-200 font-black uppercase tracking-widest mb-4">{chartData.metric === 'weight' ? 'Carico Max' : 'Volume Totale'}</p>
-                                        <p className="text-[200px] leading-none font-black text-white italic drop-shadow-2xl">
-                                            {chartData.maxValue} <span className="text-[60px] text-emerald-400 not-italic">kg</span>
+                                    <div
+                                        className="p-14 rounded-[4rem] text-center relative overflow-hidden"
+                                        style={{
+                                            backgroundColor: "#0f172a",
+                                            border: "6px solid rgba(13, 242, 137, 0.45)",
+                                            boxShadow: "0 25px 80px rgba(0, 0, 0, 0.9)"
+                                        }}
+                                    >
+                                        <p className="text-[40px] font-black uppercase tracking-widest mb-4" style={{ color: "#94a3b8" }}>
+                                            {chartData.metric === 'weight' ? 'Carico Max' : 'Volume Totale'}
                                         </p>
-                                        <p className="text-[42px] font-black text-slate-950 mt-8 bg-emerald-400 py-4 px-10 rounded-full inline-block truncate max-w-full shadow-[0_0_25px_rgba(52,211,153,0.6)]">
+                                        <p className="text-[200px] leading-none font-black italic drop-shadow-2xl" style={{ color: "#ffffff" }}>
+                                            {chartData.maxValue} <span className="text-[60px] not-italic" style={{ color: "#0df289" }}>kg</span>
+                                        </p>
+                                        <p
+                                            className="text-[42px] font-black mt-8 py-4 px-10 rounded-full inline-block truncate max-w-full"
+                                            style={{
+                                                backgroundColor: "#0df289",
+                                                color: "#080b11",
+                                                boxShadow: "0 0 25px rgba(13, 242, 137, 0.6)"
+                                            }}
+                                        >
                                             +{chartData.growth}% dalla prima volta
                                         </p>
                                     </div>
@@ -171,9 +251,16 @@ export default function StoryPreviewModal({ open, onClose, workoutData, chartDat
 
                         {/* Footer Story */}
                         <div className="mt-auto z-10 w-full text-center pb-12 flex flex-col items-center">
-                            <div className="bg-white/15 px-10 py-5 rounded-full flex items-center gap-4 border-2 border-white/30 shadow-xl">
-                                <span className="material-symbols-outlined text-[40px] text-white">bolt</span>
-                                <span className="text-[32px] font-black text-white tracking-widest uppercase">OnlyGym App</span>
+                            <div
+                                className="px-10 py-5 rounded-full flex items-center gap-4"
+                                style={{
+                                    backgroundColor: "rgba(255, 255, 255, 0.12)",
+                                    border: "2px solid rgba(255, 255, 255, 0.25)",
+                                    boxShadow: "0 10px 30px rgba(0, 0, 0, 0.5)"
+                                }}
+                            >
+                                <span className="material-symbols-outlined text-[40px]" style={{ color: "#0df289" }}>bolt</span>
+                                <span className="text-[32px] font-black tracking-widest uppercase" style={{ color: "#ffffff" }}>OnlyGym App</span>
                             </div>
                         </div>
                     </div>
