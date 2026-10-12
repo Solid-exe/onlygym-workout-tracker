@@ -119,12 +119,11 @@ export default function App() {
         setupSound();
     }, []);
 
-    if (showSplash) {
-        return <SplashScreen onFinish={() => setShowSplash(false)} />;
-    }
-
     return (
         <BrowserRouter>
+            {/* Splash Screen Overlay */}
+            {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
+
             {/* Broadcast Popup - Comunicazioni Admin */}
             <BroadcastPopup />
             {/* Global Badge Unlock Modal */}

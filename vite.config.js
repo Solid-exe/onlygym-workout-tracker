@@ -1,22 +1,19 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
-import legacy from '@vitejs/plugin-legacy'
 
 // https://vitejs.dev/config/
 export default defineConfig({
     root: '.',
     plugins: [
         react(),
-        legacy({
-            targets: ['defaults', 'not IE 11'],
-        }),
         VitePWA({
             registerType: 'autoUpdate',
             workbox: {
                 cleanupOutdatedCaches: true,
                 skipWaiting: true,
-                clientsClaim: true
+                clientsClaim: true,
+                navigateFallbackDenylist: [/^\/api/],
             },
             includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
             manifest: {
@@ -24,8 +21,8 @@ export default defineConfig({
                 short_name: 'OnlyGym',
                 description: 'Il tuo tracker di allenamento definitivo per tutti i tuoi workout',
                 version: '2.0.1',
-                theme_color: '#000000',
-                background_color: '#000000',
+                theme_color: '#080b11',
+                background_color: '#080b11',
                 display: 'standalone',
                 icons: [
                     { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
@@ -41,6 +38,8 @@ export default defineConfig({
     },
     build: {
         outDir: 'dist',
+        target: 'es2020',
+        sourcemap: false,
     },
     server: {
         port: 5180,

@@ -1,10 +1,8 @@
-import { AdMob, BannerAdSize, BannerAdPosition } from '@capacitor-community/admob';
 import { Capacitor } from '@capacitor/core';
 
 // Test Ad Unit IDs ufficiali forniti da Google per Android
 // Sostituire con i propri Ad Unit ID di AdMob prima della pubblicazione definitiva
 const TEST_BANNER_ID = 'ca-app-pub-3940256099942544/6300978111';
-
 const NO_ADS_STORAGE_KEY = 'onlygym_ad_free_status';
 
 class AdMobService {
@@ -37,7 +35,11 @@ class AdMobService {
         }
 
         // Notifica i componenti React
-        window.dispatchEvent(new CustomEvent('onlygym:ad-free-changed', { detail: { isAdFree: this.isAdFree } }));
+        try {
+            window.dispatchEvent(new CustomEvent('onlygym:ad-free-changed', { detail: { isAdFree: this.isAdFree } }));
+        } catch (e) {
+            console.debug('CustomEvent dispatch error', e);
+        }
     }
 
     isUserAdFree() {
@@ -46,13 +48,14 @@ class AdMobService {
 
     async initialize() {
         if (!Capacitor.isNativePlatform()) {
-            console.log('[AdMob] In esecuzione su browser web, AdMob disattivato.');
+            // Su browser web (incluso Safari su iPhone) AdMob è completamente disattivato
             return;
         }
 
         if (this.initialized) return;
 
         try {
+            const { AdMob } = await import('@capacitor-community/admob');
             await AdMob.initialize({
                 initializeForTesting: true,
             });
@@ -72,19 +75,20 @@ class AdMobService {
         if (!Capacitor.isNativePlatform() || this.isAdFree) return;
 
         try {
+            const { AdMob, BannerAdSize, BannerAdPosition } = await import('@capacitor-community/admob');
             await AdMob.showBanner({
                 adId: TEST_BANNER_ID,
                 adSize: BannerAdSize.BANNER,
                 position: BannerAdPosition.BOTTOM_CENTER,
-                margin: 56, // posizionato sopra o in corrispondenza del footer
+                margin: 56, // posizionato sopra il footer
                 isTesting: true,
             });
             this.bannerShowing = true;
             console.log('[AdMob] Banner mostrato con successo');
         } catch (error) {
             console.error('[AdMob] Errore caricamento banner:', error);
-            // Fallback: riprova con TOP_CENTER o senza margin se il dispositivo ha vincoli
             try {
+                const { AdMob, BannerAdSize, BannerAdPosition } = await import('@capacitor-community/admob');
                 await AdMob.showBanner({
                     adId: TEST_BANNER_ID,
                     adSize: BannerAdSize.BANNER,
@@ -102,6 +106,7 @@ class AdMobService {
         if (!Capacitor.isNativePlatform() || !this.bannerShowing) return;
 
         try {
+            const { AdMob } = await import('@capacitor-community/admob');
             await AdMob.hideBanner();
             await AdMob.removeBanner();
             this.bannerShowing = false;
@@ -112,4 +117,3 @@ class AdMobService {
 }
 
 export const admobService = new AdMobService();
-

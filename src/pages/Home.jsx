@@ -8,8 +8,13 @@ export default function Home() {
     const navigate = useNavigate();
     const { userProfile, plans, startWorkout, history, authToken, notifications, isHealthConnected, healthData } = useStore();
     const [currentUserId, setCurrentUserId] = useState(null);
-    const unreadCount = notifications ? notifications.filter(n => !n.read).length : 0;
-    const [isCertBannerVisible, setIsCertBannerVisible] = useState(!sessionStorage.getItem('cert-dismissed'));
+    const [isCertBannerVisible, setIsCertBannerVisible] = useState(() => {
+        try {
+            return !sessionStorage.getItem('cert-dismissed');
+        } catch {
+            return false;
+        }
+    });
     const [showFeedback, setShowFeedback] = useState(false);
 
     useEffect(() => {
