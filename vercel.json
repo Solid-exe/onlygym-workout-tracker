@@ -25,7 +25,7 @@
             ]
         },
         {
-            "source": "/(index.html)?",
+            "source": "/",
             "headers": [
                 {
                     "key": "Cache-Control",
@@ -34,7 +34,25 @@
             ]
         },
         {
-            "source": "/(sw.js|registerSW.js|workbox-(.*).js)",
+            "source": "/index.html",
+            "headers": [
+                {
+                    "key": "Cache-Control",
+                    "value": "no-cache, no-store, must-revalidate"
+                }
+            ]
+        },
+        {
+            "source": "/sw.js",
+            "headers": [
+                {
+                    "key": "Cache-Control",
+                    "value": "no-cache, no-store, must-revalidate"
+                }
+            ]
+        },
+        {
+            "source": "/registerSW.js",
             "headers": [
                 {
                     "key": "Cache-Control",
