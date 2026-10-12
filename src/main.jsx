@@ -48,7 +48,7 @@ try {
             <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;background:#080b11;color:#ffffff;font-family:sans-serif;padding:24px;text-align:center;">
                 <h1 style="font-size:20px;font-weight:bold;margin-bottom:8px;">OnlyGym sta aggiornando i dati...</h1>
                 <p style="color:#94a3b8;font-size:13px;margin-bottom:20px;">Tocca il pulsante in basso per ricaricare la versione più recente.</p>
-                <button onclick="window.location.reload(true)" style="background:#0df289;color:#080b11;border:none;padding:12px 24px;border-radius:12px;font-weight:bold;cursor:pointer;">Ricarica App</button>
+                <button onclick="if(window.__resetOnlyGym){window.__resetOnlyGym()}else{window.location.reload(true)}" style="background:#0df289;color:#080b11;border:none;padding:12px 24px;border-radius:12px;font-weight:bold;cursor:pointer;">Ricarica App</button>
             </div>
         `;
     }
