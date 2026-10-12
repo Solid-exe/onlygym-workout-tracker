@@ -48,7 +48,7 @@ class ErrorBoundary extends React.Component {
 
                         <button
                             onClick={this.handleReload}
-                            className="w-full py-4 bg-white hover:bg-slate-100 text-black font-black uppercase tracking-widest text-xs rounded-2xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-white/10 active:scale-[0.98]"
+                            className="w-full py-4 bg-primary hover:bg-primary/90 text-slate-950 font-black uppercase tracking-widest text-xs rounded-2xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/25 active:scale-[0.98]"
                         >
                             <span className="material-symbols-outlined text-[18px]">refresh</span>
                             Ricarica App

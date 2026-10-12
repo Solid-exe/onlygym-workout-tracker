@@ -55,8 +55,8 @@ export default function Home() {
                         )}
                     </div>
                     <div>
-                        <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">{getGreeting()}</p>
-                        <h2 className="text-xl font-bold leading-tight tracking-tight text-slate-900">
+                        <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold">{getGreeting()}</p>
+                        <h2 className="text-xl font-bold leading-tight tracking-tight text-white">
                             CIAO, {userProfile.name?.split(' ')[0]?.toUpperCase()}
                         </h2>
                     </div>
@@ -64,13 +64,13 @@ export default function Home() {
                 <div className="flex items-center gap-2">
                     <button
                         onClick={() => setShowFeedback(true)}
-                        className="flex size-10 items-center justify-center rounded-xl bg-white shadow-sm border border-slate-100 text-slate-600 hover:text-primary transition-colors"
+                        className="flex size-10 items-center justify-center rounded-xl bg-[#111726] shadow-sm border border-slate-800 text-slate-300 hover:text-primary transition-colors"
                     >
                         <span className="material-symbols-outlined text-xl">chat_bubble</span>
                     </button>
                     <button
                         onClick={() => navigate('/notifications')}
-                        className="relative flex size-10 items-center justify-center rounded-xl bg-white shadow-sm border border-slate-100 text-slate-600 hover:text-primary transition-colors"
+                        className="relative flex size-10 items-center justify-center rounded-xl bg-[#111726] shadow-sm border border-slate-800 text-slate-300 hover:text-primary transition-colors"
                     >
                         <span className="material-symbols-outlined text-xl">notifications</span>
                         {unreadCount > 0 && (
@@ -105,7 +105,7 @@ export default function Home() {
                             <h4 className="text-white text-2xl font-bold mb-4">
                                 {suggestedPlan ? suggestedPlan.name.toUpperCase() : 'CREA LA TUA SCHEDA'}
                             </h4>
-                            <button className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2">
+                            <button className="w-full bg-primary hover:bg-primary/90 text-slate-950 font-black py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2">
                                 <span>Inizia</span>
                                 <span className="material-symbols-outlined text-sm">play_arrow</span>
                             </button>
@@ -191,43 +191,43 @@ export default function Home() {
                         {/* Progress Grid */}
                         <section>
                             <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-lg font-bold text-slate-900">I Tuoi Progressi</h3>
+                                <h3 className="text-lg font-bold text-white">I Tuoi Progressi</h3>
                                 <button onClick={() => navigate('/progress')} className="text-primary text-sm font-semibold">Vedi tutto</button>
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 {/* Workouts Card */}
-                                <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex flex-col gap-3">
-                                    <div className="size-10 rounded-lg bg-blue-50 flex items-center justify-center">
-                                        <span className="material-symbols-outlined text-blue-500">monitoring</span>
+                                <div className="bg-[#111726] p-4 rounded-xl border border-slate-800 shadow-sm flex flex-col gap-3">
+                                    <div className="size-10 rounded-lg bg-blue-500/20 border border-blue-500/30 flex items-center justify-center">
+                                        <span className="material-symbols-outlined text-blue-400">monitoring</span>
                                     </div>
                                     <div>
-                                        <p className="text-2xl font-bold tracking-tight text-slate-900">{userProfile.workoutsCompleted}</p>
-                                        <p className="text-slate-500 text-sm">Workout Totali</p>
+                                        <p className="text-2xl font-black tracking-tight text-white">{userProfile.workoutsCompleted}</p>
+                                        <p className="text-slate-400 text-sm">Workout Totali</p>
                                     </div>
                                 </div>
 
                                 {/* Streak Card */}
-                                <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex flex-col gap-3">
-                                    <div className="size-10 rounded-lg bg-orange-50 flex items-center justify-center">
+                                <div className="bg-[#111726] p-4 rounded-xl border border-slate-800 shadow-sm flex flex-col gap-3">
+                                    <div className="size-10 rounded-lg bg-orange-500/20 border border-orange-500/30 flex items-center justify-center">
                                         <span className="material-symbols-outlined text-primary">flare</span>
                                     </div>
                                     <div>
-                                        <p className="text-2xl font-bold tracking-tight text-slate-900">{userProfile.streak || 0} Giorni</p>
-                                        <p className="text-slate-500 text-sm">Streak</p>
+                                        <p className="text-2xl font-black tracking-tight text-white">{userProfile.streak || 0} Giorni</p>
+                                        <p className="text-slate-400 text-sm">Streak</p>
                                     </div>
                                 </div>
 
                                 {/* Active Plans Card */}
-                                <div className="col-span-2 bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex items-center gap-4">
-                                    <div className="size-12 rounded-lg bg-green-50 flex items-center justify-center">
-                                        <span className="material-symbols-outlined text-green-500">schedule</span>
+                                <div className="col-span-2 bg-[#111726] p-4 rounded-xl border border-slate-800 shadow-sm flex items-center gap-4">
+                                    <div className="size-12 rounded-lg bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
+                                        <span className="material-symbols-outlined text-emerald-400">schedule</span>
                                     </div>
                                     <div className="flex-1">
-                                        <p className="text-2xl font-bold tracking-tight text-slate-900">{plans.length}</p>
-                                        <p className="text-slate-500 text-sm">Schede Attive</p>
+                                        <p className="text-2xl font-black tracking-tight text-white">{plans.length}</p>
+                                        <p className="text-slate-400 text-sm">Schede Attive</p>
                                     </div>
-                                    <div className="h-2 w-24 bg-slate-100 rounded-full overflow-hidden">
-                                        <div className="bg-green-500 h-full rounded-full" style={{ width: `${Math.min(plans.length * 25, 100)}%` }}></div>
+                                    <div className="h-2 w-24 bg-slate-800 rounded-full overflow-hidden">
+                                        <div className="bg-primary h-full rounded-full" style={{ width: `${Math.min(plans.length * 25, 100)}%` }}></div>
                                     </div>
                                 </div>
                             </div>
@@ -236,26 +236,26 @@ export default function Home() {
                         {/* Recent History */}
                         <section className="mt-8">
                             <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-lg font-bold text-slate-900">Recenti</h3>
+                                <h3 className="text-lg font-bold text-white">Recenti</h3>
                                 <button onClick={() => navigate('/history')} className="text-primary text-sm font-semibold">Vedi tutti</button>
                             </div>
                             <div className="space-y-3">
                                 {history.length === 0 ? (
-                                    <div className="flex flex-col items-center justify-center py-12 px-6 bg-white/40 rounded-xl border-2 border-dashed border-primary/20">
-                                        <div className="w-16 h-16 mb-4 bg-primary/5 rounded-full flex items-center justify-center">
-                                            <span className="material-symbols-outlined text-primary/40 text-3xl">inbox</span>
+                                    <div className="flex flex-col items-center justify-center py-12 px-6 bg-[#111726]/40 rounded-xl border-2 border-dashed border-primary/20">
+                                        <div className="w-16 h-16 mb-4 bg-primary/10 rounded-full flex items-center justify-center">
+                                            <span className="material-symbols-outlined text-primary text-3xl">inbox</span>
                                         </div>
-                                        <p className="text-slate-600 font-medium">Nessun allenamento</p>
+                                        <p className="text-slate-300 font-medium">Nessun allenamento</p>
                                         <p className="text-slate-400 text-xs mt-1 text-center">Completa il tuo primo workout per vederlo qui.</p>
                                     </div>
                                 ) : (
                                     history.slice(0, 3).map((session, i) => (
-                                        <div key={i} className="flex items-center gap-3 p-4 bg-white border border-slate-100 rounded-xl shadow-sm">
-                                            <div className="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center">
-                                                <span className="material-symbols-outlined text-green-500 text-lg">check_circle</span>
+                                        <div key={i} className="flex items-center gap-3 p-4 bg-[#111726] border border-slate-800 rounded-xl shadow-sm">
+                                            <div className="w-10 h-10 rounded-lg bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
+                                                <span className="material-symbols-outlined text-emerald-400 text-lg">check_circle</span>
                                             </div>
                                             <div className="flex-1">
-                                                <h4 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                                                <h4 className="font-bold text-white text-sm flex items-center gap-2">
                                                     {session.name}
                                                     {session.feeling === 'facile' && <span>🟢</span>}
                                                     {session.feeling === 'giusto' && <span>🟡</span>}
@@ -273,7 +273,7 @@ export default function Home() {
             {/* Floating Chat */}
             <button
                 onClick={() => navigate('/chat')}
-                className="fixed bottom-24 right-4 w-14 h-14 bg-primary text-white rounded-full shadow-lg shadow-primary/30 hover:scale-110 active:scale-95 transition-all z-50 flex items-center justify-center"
+                className="fixed bottom-24 right-4 w-14 h-14 bg-primary text-slate-950 rounded-full shadow-lg shadow-primary/30 hover:scale-110 active:scale-95 transition-all z-50 flex items-center justify-center"
             >
                 <span className="material-symbols-outlined text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>chat</span>
             </button>

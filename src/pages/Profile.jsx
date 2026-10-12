@@ -112,13 +112,13 @@ export default function Profile() {
                 {isEditingName ? (
                     <div className="flex items-center gap-2 mt-2">
                         <input type="text" value={newName} onChange={(e) => setNewName(e.target.value)} autoFocus
-                            className="bg-white border border-primary rounded-lg px-4 py-2 text-xl font-bold text-slate-900 text-center focus:outline-none w-48 shadow-sm" />
-                        <button onClick={handleSaveName} className="p-2 bg-primary text-white rounded-lg"><span className="material-symbols-outlined text-lg">check</span></button>
-                        <button onClick={() => setIsEditingName(false)} className="p-2 bg-slate-100 text-slate-400 rounded-lg"><span className="material-symbols-outlined text-lg">close</span></button>
+                            className="bg-[#151d2e] border border-primary rounded-lg px-4 py-2 text-xl font-bold text-white text-center focus:outline-none w-48 shadow-sm" />
+                        <button onClick={handleSaveName} className="p-2 bg-primary text-slate-950 rounded-lg font-bold"><span className="material-symbols-outlined text-lg">check</span></button>
+                        <button onClick={() => setIsEditingName(false)} className="p-2 bg-slate-800 text-slate-400 rounded-lg"><span className="material-symbols-outlined text-lg">close</span></button>
                     </div>
                 ) : (
                     <div className="flex items-center gap-2">
-                        <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter">{userProfile.name || "Utente"}</h2>
+                        <h2 className="text-2xl font-black text-white uppercase tracking-tighter">{userProfile.name || "Utente"}</h2>
                         <button onClick={() => setIsEditingName(true)} className="p-2 text-slate-400 hover:text-primary transition-colors">
                             <span className="material-symbols-outlined text-lg">edit</span>
                         </button>
@@ -132,7 +132,7 @@ export default function Profile() {
                     </span>
                     <button 
                         onClick={() => navigate('/battlepass')}
-                        className="text-[10px] font-bold uppercase tracking-wider text-violet-600 bg-violet-50 hover:bg-violet-100 border border-violet-200 px-2.5 py-1 rounded-full flex items-center gap-1 transition-colors"
+                        className="text-[10px] font-bold uppercase tracking-wider text-violet-400 bg-violet-500/10 hover:bg-violet-500/20 border border-violet-500/30 px-2.5 py-1 rounded-full flex items-center gap-1 transition-colors"
                     >
                         <span className="material-symbols-outlined text-[12px]">trophy</span> Battle Pass
                     </button>
@@ -141,12 +141,12 @@ export default function Profile() {
 
             {/* Stats Grid */}
             <div className="grid grid-cols-2 gap-3 mb-4">
-                <div className="bg-white border border-slate-100 p-4 rounded-xl flex flex-col items-center justify-center text-center shadow-sm">
-                    <span className="text-2xl font-black text-slate-900">{userProfile.workoutsCompleted}</span>
+                <div className="bg-[#111726] border border-slate-800 p-4 rounded-xl flex flex-col items-center justify-center text-center shadow-sm">
+                    <span className="text-2xl font-black text-white">{userProfile.workoutsCompleted}</span>
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">Workout</span>
                 </div>
-                <div className="bg-white border border-slate-100 p-4 rounded-xl flex flex-col items-center justify-center text-center shadow-sm">
-                    <span className="text-2xl font-black text-slate-900">{userProfile.trainingDaysGoal}</span>
+                <div className="bg-[#111726] border border-slate-800 p-4 rounded-xl flex flex-col items-center justify-center text-center shadow-sm">
+                    <span className="text-2xl font-black text-white">{userProfile.trainingDaysGoal}</span>
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">Giorni/Sett</span>
                 </div>
             </div>
@@ -210,19 +210,19 @@ export default function Profile() {
             {/* Stats & Data */}
             <div className="space-y-1 mb-6">
                 <h3 className="px-2 text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Statistiche & Dati</h3>
-                    <button onClick={() => navigate('/analysis')} className="w-full bg-white border border-slate-100 hover:border-primary/30 p-4 rounded-xl flex items-center justify-between transition-all group shadow-sm">
-                        <div className="flex items-center gap-3 text-slate-600 group-hover:text-slate-900">
-                            <span className="text-blue-500 bg-blue-50 p-2 rounded-lg"><span className="material-symbols-outlined text-lg">pie_chart</span></span>
+                    <button onClick={() => navigate('/analysis')} className="w-full bg-[#111726] border border-slate-800 hover:border-primary/40 p-4 rounded-xl flex items-center justify-between transition-all group shadow-sm">
+                        <div className="flex items-center gap-3 text-slate-200 group-hover:text-white">
+                            <span className="text-blue-400 bg-blue-500/20 border border-blue-500/30 p-2 rounded-lg flex items-center justify-center"><span className="material-symbols-outlined text-lg">pie_chart</span></span>
                             <span className="text-sm font-bold">Analisi Avanzata</span>
                         </div>
-                        <span className="material-symbols-outlined text-slate-300 group-hover:text-primary text-lg">chevron_right</span>
+                        <span className="material-symbols-outlined text-slate-400 group-hover:text-primary text-lg">chevron_right</span>
                     </button>
-                    <button onClick={handleExport} className="w-full bg-white border border-slate-100 hover:border-primary/30 p-4 rounded-xl flex items-center justify-between transition-all group shadow-sm mt-2">
-                        <div className="flex items-center gap-3 text-slate-600 group-hover:text-slate-900">
-                            <span className="text-green-500 bg-green-50 p-2 rounded-lg"><span className="material-symbols-outlined text-lg">download</span></span>
+                    <button onClick={handleExport} className="w-full bg-[#111726] border border-slate-800 hover:border-primary/40 p-4 rounded-xl flex items-center justify-between transition-all group shadow-sm mt-2">
+                        <div className="flex items-center gap-3 text-slate-200 group-hover:text-white">
+                            <span className="text-emerald-400 bg-emerald-500/20 border border-emerald-500/30 p-2 rounded-lg flex items-center justify-center"><span className="material-symbols-outlined text-lg">download</span></span>
                             <span className="text-sm font-bold">Esporta CSV</span>
                         </div>
-                        <span className="material-symbols-outlined text-slate-300 group-hover:text-primary text-lg">chevron_right</span>
+                        <span className="material-symbols-outlined text-slate-400 group-hover:text-primary text-lg">chevron_right</span>
                     </button>
                 </div>
 
@@ -231,17 +231,17 @@ export default function Profile() {
                 <h3 className="px-2 text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Account</h3>
                 {menuItems.map((item, i) => (
                     <button key={i} onClick={() => navigate(item.to)}
-                        className="w-full bg-white border border-slate-100 hover:border-primary/30 p-4 rounded-xl flex items-center justify-between transition-all group shadow-sm">
-                        <div className="flex items-center gap-3 text-slate-600 group-hover:text-slate-900 transition-colors">
-                            <span className="text-slate-400 group-hover:text-primary transition-colors relative">
+                        className="w-full bg-[#111726] border border-slate-800 hover:border-primary/40 p-4 rounded-xl flex items-center justify-between transition-all group shadow-sm">
+                        <div className="flex items-center gap-3 text-slate-200 group-hover:text-white transition-colors">
+                            <span className="text-slate-400 group-hover:text-primary transition-colors relative flex items-center justify-center">
                                 <span className="material-symbols-outlined">{item.icon}</span>
                                 {item.badge && (
-                                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-primary text-white rounded-full text-[10px] font-bold flex items-center justify-center">{item.badge}</span>
+                                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-primary text-slate-950 rounded-full text-[10px] font-black flex items-center justify-center">{item.badge}</span>
                                 )}
                             </span>
                             <span className="text-sm font-bold">{item.label}</span>
                         </div>
-                        <span className="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors text-lg">chevron_right</span>
+                        <span className="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors text-lg">chevron_right</span>
                     </button>
                 ))}
             </div>

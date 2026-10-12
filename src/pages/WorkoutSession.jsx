@@ -160,26 +160,26 @@ export default function WorkoutSession() {
     if (!workout) return null;
 
     return (
-        <div className="flex flex-col h-screen bg-background text-slate-900 overflow-hidden pb-16 relative touch-pan-y animate-in fade-in">
+        <div className="flex flex-col h-screen bg-background text-white overflow-hidden pb-16 relative touch-pan-y animate-in fade-in">
 
             {/* Top Bar - Sticky */}
-            <div className="flex justify-between items-center p-4 pt-14 bg-white/90 backdrop-blur-xl sticky top-0 z-50 border-b border-slate-200 select-none shadow-sm">
+            <div className="flex justify-between items-center p-4 pt-14 bg-[#080b11]/95 backdrop-blur-xl sticky top-0 z-50 border-b border-slate-800 select-none shadow-sm">
                 <button
                     onClick={() => { if (confirm("Annullare workout?")) { cancelWorkout(); navigate('/'); } }}
-                    className="p-2 -ml-2 rounded-full hover:bg-slate-100 active:bg-slate-200 transition-colors"
+                    className="p-2 -ml-2 rounded-full hover:bg-slate-850 active:bg-slate-800 transition-colors"
                     aria-label="Annulla Workout"
                 >
-                    <span className="material-symbols-outlined text-slate-700 text-[28px] block">close</span>
+                    <span className="material-symbols-outlined text-slate-300 text-[28px] block">close</span>
                 </button>
                 <div className="text-center">
                     <h2 className="text-[10px] font-black text-primary uppercase tracking-[0.2em]">{workout.name}</h2>
-                    <span className="font-sans text-2xl font-black tracking-tighter text-slate-800 bg-slate-100 px-3 py-0.5 rounded-lg border border-slate-200 mt-0.5 inline-block shadow-inner drop-shadow-sm">
+                    <span className="font-sans text-2xl font-black tracking-tighter text-white bg-[#111726] px-3 py-0.5 rounded-lg border border-slate-800 mt-0.5 inline-block shadow-inner drop-shadow-sm">
                         {Math.floor(timerValue / 60)}:{(timerValue % 60).toString().padStart(2, '0')}
                     </span>
                 </div>
                 <button
                     onClick={handleFinish}
-                    className="bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider border border-primary/20 shadow-sm active:scale-95"
+                    className="bg-primary text-slate-950 hover:bg-primary/90 transition-all px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider border border-primary/20 shadow-sm active:scale-95"
                 >
                     FINISH
                 </button>
@@ -189,14 +189,14 @@ export default function WorkoutSession() {
             <div className="flex-1 overflow-y-auto p-4 space-y-8 pb-32 custom-scrollbar">
 
                 {workout.exercises.map((exercise, exIndex) => (
-                    <div key={exIndex} className="animate-in fade-in slide-in-from-bottom-4 duration-500 delay-100 bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div key={exIndex} className="animate-in fade-in slide-in-from-bottom-4 duration-500 delay-100 bg-[#111726] rounded-3xl border border-slate-800 shadow-sm overflow-hidden">
 
                         {/* Exercise Header */}
-                        <div className="flex justify-between items-start mb-0 p-5 bg-gradient-to-b from-slate-50 to-white border-b border-slate-100">
+                        <div className="flex justify-between items-start mb-0 p-5 bg-[#151d2e] border-b border-slate-800">
                             <div>
-                                <h1 className="text-2xl font-black italic uppercase text-slate-900 mb-1 tracking-tighter">{exercise.name}</h1>
+                                <h1 className="text-2xl font-black italic uppercase text-white mb-1 tracking-tighter">{exercise.name}</h1>
                                 <div className="flex flex-wrap items-center gap-2 mt-1">
-                                    <span className="text-[10px] font-black text-slate-500 bg-white border border-slate-200 px-2.5 py-1 rounded shadow-sm tracking-wider uppercase inline-flex items-center gap-1">
+                                    <span className="text-[10px] font-black text-slate-300 bg-[#0d121c] border border-slate-800 px-2.5 py-1 rounded shadow-sm tracking-wider uppercase inline-flex items-center gap-1">
                                         <span className="material-symbols-outlined text-[14px]">flag</span> TARGET: {exercise.sets} SET x {exercise.reps || 'MAX'}
                                     </span>
                                     {calculate1RM(exercise.setsData) > 0 && (
@@ -210,7 +210,7 @@ export default function WorkoutSession() {
                                 {userProfile?.role !== 'admin' && (
                                     <button
                                         onClick={() => handleOpenSwap(exIndex, exercise.name)}
-                                        className="w-10 h-10 flex justify-center items-center bg-white rounded-xl border border-slate-200 text-slate-500 hover:text-amber-500 hover:border-amber-300 hover:bg-amber-50 transition-colors active:scale-95 shadow-sm"
+                                        className="w-10 h-10 flex justify-center items-center bg-[#0d121c] rounded-xl border border-slate-800 text-slate-300 hover:text-amber-400 hover:border-amber-400/50 hover:bg-amber-400/10 transition-colors active:scale-95 shadow-sm"
                                         title="Alternativa Smart"
                                     >
                                         <span className="material-symbols-outlined text-[20px]">swap_horiz</span>
@@ -218,14 +218,14 @@ export default function WorkoutSession() {
                                 )}
                                 <button
                                     onClick={() => navigate(`/progress/${encodeURIComponent(exercise.name)}`)}
-                                    className="w-10 h-10 flex justify-center items-center bg-white rounded-xl border border-slate-200 text-slate-500 hover:text-primary hover:border-primary/50 hover:bg-primary/5 transition-colors active:scale-95 shadow-sm"
+                                    className="w-10 h-10 flex justify-center items-center bg-[#0d121c] rounded-xl border border-slate-800 text-slate-300 hover:text-primary hover:border-primary/50 hover:bg-primary/10 transition-colors active:scale-95 shadow-sm"
                                     title="Grafico Progressione"
                                 >
                                     <span className="material-symbols-outlined text-[20px]">bar_chart</span>
                                 </button>
                                 <button
                                     onClick={() => handleOpenVideo(exercise.name)}
-                                    className="w-10 h-10 flex justify-center items-center bg-white rounded-xl border border-slate-200 text-slate-500 hover:text-blue-500 hover:border-blue-300 hover:bg-blue-50 transition-colors active:scale-95 shadow-sm"
+                                    className="w-10 h-10 flex justify-center items-center bg-[#0d121c] rounded-xl border border-slate-800 text-slate-300 hover:text-blue-400 hover:border-blue-400/50 hover:bg-blue-400/10 transition-colors active:scale-95 shadow-sm"
                                     title="Guarda video tecnica"
                                 >
                                     <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>play_circle</span>
@@ -234,36 +234,36 @@ export default function WorkoutSession() {
                         </div>
 
                         {/* EXERCISE NOTES */}
-                        <div className="px-5 pb-3 bg-white">
+                        <div className="px-5 pb-3 bg-[#111726]">
                             <textarea
                                 placeholder="Aggiungi una nota (es. altezza sellino, feeling)... Dimentichi o impari qualcosa? Scrivilo qui per la prossima volta!"
                                 value={exercise.notes || ''}
                                 onChange={(e) => updateExerciseNote(exIndex, e.target.value)}
-                                className="w-full text-xs p-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 focus:bg-white resize-none transition-all shadow-inner"
+                                className="w-full text-xs p-3 rounded-xl border border-slate-800 bg-[#0d121c] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 resize-none transition-all shadow-inner"
                                 rows="2"
                             />
                         </div>
 
                         {/* THE TABLE (EXCEL STYLE) */}
-                        <div className="bg-white">
+                        <div className="bg-[#111726]">
                             {/* Header */}
-                            <div className="flex items-center text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] py-2.5 px-3 border-b border-slate-100 bg-slate-50 shadow-inner">
-                                <div className="w-8 text-center ml-1">#</div>
-                                <div className="flex-1 text-center text-primary">KG</div>
-                                <div className="flex-1 text-center text-primary">REPS</div>
-                                <div className="w-14 text-center">RPE</div>
+                            <div className="flex items-center text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] py-2.5 px-3 border-b border-slate-800 bg-[#0d121c] shadow-inner">
+                                <div className="w-8 text-center ml-1 text-slate-400">#</div>
+                                <div className="flex-1 text-center text-primary font-black">KG</div>
+                                <div className="flex-1 text-center text-primary font-black">REPS</div>
+                                <div className="w-14 text-center text-slate-400">RPE</div>
                                 <div className="w-12 text-center mr-1"></div>
                             </div>
 
                             {/* Rows */}
-                            <div className="divide-y divide-slate-100 pointer-events-auto">
+                            <div className="divide-y divide-slate-800/60 pointer-events-auto">
                                 {exercise.setsData.map((set, setIndex) => (
                                     <div
                                         key={setIndex}
-                                        className={`flex items-center py-3 px-2 transition-colors duration-200 ${storeValue(exIndex, setIndex, 'done') ? "bg-primary/5" : "hover:bg-slate-50"}`}
+                                        className={`flex items-center py-3 px-2 transition-colors duration-200 ${storeValue(exIndex, setIndex, 'done') ? "bg-primary/5" : "hover:bg-slate-800/30"}`}
                                     >
                                         <div className="w-10 flex justify-center">
-                                            <div className={`w-7 h-7 rounded-lg flex items-center justify-center font-black text-xs transition-colors shadow-inner ${storeValue(exIndex, setIndex, 'done') ? "bg-primary text-white shadow-md shadow-primary/20 border-transparent" : "bg-slate-100 text-slate-400 border border-slate-200"}`}>
+                                            <div className={`w-7 h-7 rounded-lg flex items-center justify-center font-black text-xs transition-colors shadow-inner ${storeValue(exIndex, setIndex, 'done') ? "bg-primary text-slate-950 font-black shadow-md shadow-primary/20 border-transparent" : "bg-slate-800 text-slate-300 border border-slate-700/60"}`}>
                                                 {setIndex + 1}
                                             </div>
                                         </div>
@@ -274,7 +274,7 @@ export default function WorkoutSession() {
                                                 placeholder="-"
                                                 value={storeValue(exIndex, setIndex, 'kg')}
                                                 onChange={(e) => handleSetChange(exIndex, setIndex, 'kg', e.target.value)}
-                                                className={`w-full bg-transparent text-center font-black text-2xl focus:outline-none border-b-2 border-transparent focus:border-primary transition-colors py-1 appearance-none tracking-tighter ${storeValue(exIndex, setIndex, 'done') ? "text-primary/70" : "text-slate-800"}`}
+                                                className={`w-full bg-transparent text-center font-black text-2xl focus:outline-none border-b-2 border-transparent focus:border-primary transition-colors py-1 appearance-none tracking-tighter ${storeValue(exIndex, setIndex, 'done') ? "text-primary/70" : "text-white"}`}
                                                 disabled={storeValue(exIndex, setIndex, 'done')}
                                             />
                                         </div>
@@ -285,7 +285,7 @@ export default function WorkoutSession() {
                                                 placeholder="-"
                                                 value={storeValue(exIndex, setIndex, 'reps')}
                                                 onChange={(e) => handleSetChange(exIndex, setIndex, 'reps', e.target.value)}
-                                                className={`w-full bg-transparent text-center font-black text-2xl focus:outline-none border-b-2 border-transparent focus:border-primary transition-colors py-1 appearance-none tracking-tighter ${storeValue(exIndex, setIndex, 'done') ? "text-primary/70" : "text-slate-800"}`}
+                                                className={`w-full bg-transparent text-center font-black text-2xl focus:outline-none border-b-2 border-transparent focus:border-primary transition-colors py-1 appearance-none tracking-tighter ${storeValue(exIndex, setIndex, 'done') ? "text-primary/70" : "text-white"}`}
                                                 disabled={storeValue(exIndex, setIndex, 'done')}
                                             />
                                         </div>
@@ -297,7 +297,7 @@ export default function WorkoutSession() {
                                                 step="0.5"
                                                 value={storeValue(exIndex, setIndex, 'rpe')}
                                                 onChange={(e) => handleSetChange(exIndex, setIndex, 'rpe', e.target.value)}
-                                                className={`w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-center font-black text-xs focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary transition-colors shadow-inner ${storeValue(exIndex, setIndex, 'done') ? "text-slate-400 bg-transparent border-transparent shadow-none" : "text-slate-500"}`}
+                                                className={`w-full bg-[#0d121c] border border-slate-800 rounded-lg p-2 text-center font-black text-xs focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary transition-colors shadow-inner ${storeValue(exIndex, setIndex, 'done') ? "text-slate-400 bg-transparent border-transparent shadow-none" : "text-slate-200"}`}
                                                 disabled={storeValue(exIndex, setIndex, 'done')}
                                             />
                                         </div>
@@ -305,7 +305,7 @@ export default function WorkoutSession() {
                                         <div className="w-12 flex justify-end pr-1">
                                             <button
                                                 onClick={() => toggleSetDone(exIndex, setIndex)}
-                                                className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all active:scale-90 duration-200 border ${storeValue(exIndex, setIndex, 'done') ? "bg-primary border-primary text-white shadow-md shadow-primary/30" : "bg-white border-slate-200 text-slate-300 hover:border-slate-300 hover:bg-slate-50 hover:text-slate-400"}`}
+                                                className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all active:scale-90 duration-200 border ${storeValue(exIndex, setIndex, 'done') ? "bg-primary border-primary text-slate-950 font-black shadow-md shadow-primary/30" : "bg-[#151d2e] border-slate-800 text-slate-400 hover:border-slate-700 hover:text-white"}`}
                                             >
                                                 <span className="material-symbols-outlined text-[24px]" style={{ fontVariationSettings: "'FILL' 1, 'wght' 700" }}>check</span>
                                             </button>
@@ -315,13 +315,13 @@ export default function WorkoutSession() {
                             </div>
 
                             {/* Add/Remove Set Buttons */}
-                            <div className="p-3 border-t border-slate-100 bg-slate-50 flex gap-2 w-full mt-auto">
+                            <div className="p-3 border-t border-slate-800 bg-[#0d121c] flex gap-2 w-full mt-auto">
                                 <button
                                     onClick={() => {
                                         if (navigator.vibrate) navigator.vibrate(30);
                                         removeSet(exIndex);
                                     }}
-                                    className="flex-1 py-3 rounded-xl border border-slate-200 bg-white text-[10px] font-black text-slate-400 uppercase tracking-widest hover:border-red-200 hover:text-red-500 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 active:bg-slate-100"
+                                    className="flex-1 py-3 rounded-xl border border-slate-800 bg-[#151d2e] text-[10px] font-black text-slate-400 uppercase tracking-widest hover:border-red-500/40 hover:text-red-400 transition-colors shadow-sm disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 active:bg-slate-800"
                                     disabled={exercise.setsData.length <= 1}
                                 >
                                     <span className="material-symbols-outlined text-[16px]">remove</span> Rimuovi
@@ -331,7 +331,7 @@ export default function WorkoutSession() {
                                         if (navigator.vibrate) navigator.vibrate(30);
                                         addSet(exIndex);
                                     }}
-                                    className="flex-1 py-3 rounded-xl border border-slate-200 bg-white text-[10px] font-black text-slate-500 uppercase tracking-widest hover:border-primary/30 hover:text-primary transition-colors shadow-sm flex items-center justify-center gap-1.5 active:bg-slate-100"
+                                    className="flex-1 py-3 rounded-xl border border-primary/30 bg-primary/10 text-[10px] font-black text-primary uppercase tracking-widest hover:bg-primary/20 transition-colors shadow-sm flex items-center justify-center gap-1.5 active:bg-primary/30"
                                 >
                                     <span className="material-symbols-outlined text-[16px]">add</span> Aggiungi
                                 </button>

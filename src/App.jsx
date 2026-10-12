@@ -70,11 +70,8 @@ export default function App() {
     }, []);
 
     useEffect(() => {
-        if (isDarkMode) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
+        // OnlyGym operates permanently in high-contrast stealth dark mode
+        document.documentElement.classList.add('dark');
     }, [isDarkMode]);
 
     useEffect(() => {

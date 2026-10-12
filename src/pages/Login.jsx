@@ -179,7 +179,7 @@ export default function Login() {
 
                 {/* Login Button */}
                 <button onClick={handleLogin} disabled={loading || googleLoading}
-                    className={`w-full py-4 font-bold uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-2 ${loading ? 'bg-slate-800 text-slate-500' : 'bg-white text-black shadow-lg shadow-white/10 hover:bg-slate-100 hover:scale-[1.02] active:scale-[0.98]'
+                    className={`w-full py-4 font-black uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-2 ${loading ? 'bg-slate-800 text-slate-500' : 'bg-primary text-slate-950 shadow-lg shadow-primary/25 hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98]'
                         }`}>
                     {loading ? <span className="animate-pulse">Accesso...</span> : <><>Accedi </><span className="material-symbols-outlined text-lg">arrow_forward</span></> }
                 </button>

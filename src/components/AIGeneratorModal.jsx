@@ -252,11 +252,11 @@ export default function AIGeneratorModal({ onClose, onPlanGenerated }) {
                     <button
                         onClick={handleGenerate}
                         disabled={loading}
-                        className="w-full py-4 rounded-2xl font-black uppercase tracking-widest text-sm text-black bg-white hover:bg-slate-100 flex items-center justify-center gap-3 transition-all active:scale-[0.98] disabled:opacity-70 shadow-lg shadow-white/10"
+                        className="w-full py-4 rounded-2xl font-black uppercase tracking-widest text-sm text-slate-950 bg-primary hover:bg-primary/90 flex items-center justify-center gap-3 transition-all active:scale-[0.98] disabled:opacity-70 shadow-lg shadow-primary/25"
                     >
                         {loading ? (
                             <>
-                                <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                                <div className="w-5 h-5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
                                 Generazione in corso...
                             </>
                         ) : (

@@ -48,7 +48,7 @@ export default function Progress() {
     }, [selectedExercise, history]);
 
     return (
-        <div className="flex flex-col min-h-screen bg-background text-slate-900 p-4 pb-24">
+        <div className="flex flex-col min-h-screen bg-background text-white p-4 pb-24">
 
             <div className="flex items-center gap-4 mb-4 pt-6 justify-between">
                 <div className="flex items-center gap-4">
@@ -57,26 +57,26 @@ export default function Progress() {
                     </button>
                     <div className="flex items-center gap-2">
                         <span className="material-symbols-outlined text-primary text-2xl">trending_up</span>
-                        <h1 className="text-xl font-bold uppercase text-slate-900 tracking-tight">Progressione</h1>
+                        <h1 className="text-xl font-bold uppercase text-white tracking-tight">Progressione</h1>
                     </div>
                 </div>
                 {selectedExercise && chartData.length > 0 && (
                     <button 
                         onClick={() => setShowStoryModal(true)}
-                        className="bg-primary/10 text-primary p-2 rounded-xl flex items-center justify-center hover:bg-primary hover:text-white transition-colors border border-primary/20 active:scale-95"
+                        className="bg-primary/10 text-primary p-2 rounded-xl flex items-center justify-center hover:bg-primary hover:text-slate-950 transition-colors border border-primary/20 active:scale-95"
                     >
                         <span className="material-symbols-outlined">ios_share</span>
                     </button>
                 )}
             </div>
 
-            <div className="flex bg-white border border-slate-200 rounded-xl p-1 mb-6 shadow-sm">
+            <div className="flex bg-[#111726] border border-slate-800 rounded-xl p-1 mb-6 shadow-sm">
                 <button onClick={() => setChartType('weight')}
-                    className={`flex-1 py-2.5 text-xs font-bold uppercase rounded-lg transition-all ${chartType === 'weight' ? 'bg-primary text-white shadow-sm' : 'text-slate-400'}`}>
+                    className={`flex-1 py-2.5 text-xs font-bold uppercase rounded-lg transition-all ${chartType === 'weight' ? 'bg-primary text-slate-950 font-black shadow-sm' : 'text-slate-400 hover:text-white'}`}>
                     Carico Max
                 </button>
                 <button onClick={() => setChartType('volume')}
-                    className={`flex-1 py-2.5 text-xs font-bold uppercase rounded-lg transition-all ${chartType === 'volume' ? 'bg-blue-500 text-white shadow-sm' : 'text-slate-400'}`}>
+                    className={`flex-1 py-2.5 text-xs font-bold uppercase rounded-lg transition-all ${chartType === 'volume' ? 'bg-blue-500 text-white shadow-sm' : 'text-slate-400 hover:text-white'}`}>
                     Volume Totale
                 </button>
             </div>
@@ -85,27 +85,27 @@ export default function Progress() {
                 <div className="mb-8">
                     <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 block">Seleziona Esercizio</label>
                     <select value={selectedExercise || ''} onChange={(e) => setSelectedExercise(e.target.value)}
-                        className="w-full bg-white border border-slate-200 rounded-xl p-3 text-slate-900 font-bold focus:outline-none focus:border-primary shadow-sm transition-colors">
-                        {availableExercises.map(ex => <option key={ex} value={ex}>{ex}</option>)}
+                        className="w-full bg-[#151d2e] border border-slate-800 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-primary shadow-sm transition-colors">
+                        {availableExercises.map(ex => <option key={ex} value={ex} className="bg-[#151d2e] text-white">{ex}</option>)}
                     </select>
                 </div>
             )}
 
             {selectedExercise ? (
                 chartData.length > 0 ? (
-                    <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
+                    <div className="bg-[#111726] border border-slate-800 rounded-2xl p-6 shadow-sm">
                         <ProgressChart data={chartData} exerciseName={selectedExercise} metric={chartType} />
                     </div>
                 ) : (
-                    <div className="text-center py-12 border-2 border-dashed border-slate-200 rounded-xl bg-white/50">
-                        <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">Nessun dato per {selectedExercise}</p>
+                    <div className="text-center py-12 border-2 border-dashed border-slate-800 rounded-xl bg-[#111726]/50">
+                        <p className="text-slate-300 font-bold uppercase tracking-widest text-xs">Nessun dato per {selectedExercise}</p>
                         <p className="text-slate-400 text-xs mt-2">Completa alcuni allenamenti per vedere la progressione</p>
                     </div>
                 )
             ) : (
-                <div className="text-center py-12 border-2 border-dashed border-slate-200 rounded-xl bg-white/50">
-                    <span className="material-symbols-outlined text-slate-300 text-5xl mb-4 block">trending_up</span>
-                    <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">Nessun esercizio trovato</p>
+                <div className="text-center py-12 border-2 border-dashed border-slate-800 rounded-xl bg-[#111726]/50">
+                    <span className="material-symbols-outlined text-slate-400 text-5xl mb-4 block">trending_up</span>
+                    <p className="text-slate-300 font-bold uppercase tracking-widest text-xs">Nessun esercizio trovato</p>
                     <p className="text-slate-400 text-xs mt-2">Completa un allenamento per iniziare a tracciare i progressi</p>
                 </div>
             )}

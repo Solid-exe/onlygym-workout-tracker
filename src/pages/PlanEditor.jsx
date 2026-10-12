@@ -351,16 +351,16 @@ export default function PlanEditor() {
                     <button onClick={() => setShowCopyModal(true)} className="text-[10px] font-black text-slate-300 bg-card hover:bg-slate-800 px-3 py-2 rounded-xl uppercase tracking-widest hover:text-white transition-colors border border-border shadow-sm flex items-center gap-1">
                         <span className="material-symbols-outlined text-[14px]">inventory_2</span> Sfoglia
                     </button>
-                    <button onClick={handleSave} className="text-xs font-black bg-white text-black px-5 py-2 rounded-xl uppercase tracking-widest hover:bg-slate-100 active:scale-[0.98] transition-all shadow-md shadow-white/10 flex items-center gap-1">
+                    <button onClick={handleSave} className="text-xs font-black bg-primary text-slate-950 px-5 py-2 rounded-xl uppercase tracking-widest hover:bg-primary/90 active:scale-[0.98] transition-all shadow-md shadow-primary/25 flex items-center gap-1">
                         <span className="material-symbols-outlined text-[16px]">save</span> Salva
                     </button>
                 </div>
             </div>
 
             {/* Target User Banner */}
-            <div className={`p-4 rounded-2xl border mb-6 flex items-center justify-between shadow-sm transition-colors ${targetUserId ? 'bg-amber-50 border-amber-200' : 'bg-white border-slate-200'}`}>
+            <div className={`p-4 rounded-2xl border mb-6 flex items-center justify-between shadow-sm transition-colors ${targetUserId ? 'bg-amber-500/10 border-amber-500/30' : 'bg-[#111726] border-slate-800'}`}>
                 <div className="flex-1 mr-4">
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] block mb-1 opacity-70 text-slate-500">
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] block mb-1 opacity-70 text-slate-400">
                         {isTemplate ? 'Tipo Scheda' : (targetUserId ? 'Atleta Destinatario' : 'Scheda Personale')}
                     </span>
 

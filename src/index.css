@@ -6,50 +6,15 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
+  :root, html.dark, :root.dark {
     --c-primary: #0df289;
     --c-primary-foreground: #080b11;
-    --c-white: #ffffff;
-    --c-bg: #f5f7fa;
-    --c-card: #ffffff;
-    --c-slate-50: #f8fafc;
-    --c-slate-100: #edf2f7;
-    --c-slate-200: #e2e8f0;
-    --c-slate-300: #cbd5e1;
-    --c-slate-400: #94a3b8;
-    --c-slate-500: #64748b;
-    --c-slate-600: #475569;
-    --c-slate-700: #334155;
-    --c-slate-800: #1e293b;
-    --c-slate-900: #090d16;
-    --c-border: #e2e8f0;
-    --c-foreground: #090d16;
-    --c-muted: #edf2f7;
-    --c-muted-foreground: #64748b;
-    --c-accent: #edf2f7;
-    --c-accent-foreground: #090d16;
-  }
-
-  html.dark, :root.dark {
-    --c-primary: #0df289;
-    --c-primary-foreground: #080b11;
-    --c-white: #111726;
     --c-bg: #080b11;
     --c-card: #111726;
-    --c-slate-50: #0d121c;
-    --c-slate-100: #151d2e;
-    --c-slate-200: #1e293f;
-    --c-slate-300: #33435e;
-    --c-slate-400: #7e8fa6;
-    --c-slate-500: #9baec4;
-    --c-slate-600: #c5d3e3;
-    --c-slate-700: #e2ebf4;
-    --c-slate-800: #f1f5fa;
-    --c-slate-900: #ffffff;
     --c-border: #1a2336;
     --c-foreground: #f8fafc;
     --c-muted: #151d2e;
-    --c-muted-foreground: #7e8fa6;
+    --c-muted-foreground: #94a3b8;
     --c-accent: #151d2e;
     --c-accent-foreground: #ffffff;
   }
@@ -76,6 +41,94 @@
     -webkit-appearance: none;
     margin: 0;
   }
+}
+
+/* ==========================================================================
+   STEALTH DARK TYPOGRAPHY & CONTRAST SAFETY ENGINE
+   Eliminates black-on-black text and guarantees high-contrast legibility
+   ========================================================================== */
+
+/* Universal Heading & Title Contrast */
+.text-slate-900,
+.text-slate-800,
+.text-slate-700 {
+  color: #f8fafc !important;
+}
+
+/* Secondary & Muted Body Text */
+.text-slate-600 {
+  color: #cbd5e1 !important;
+}
+
+.text-slate-500 {
+  color: #94a3b8 !important;
+}
+
+/* Explicit white text utility guarantees */
+.text-white {
+  color: #ffffff !important;
+}
+
+/* Primary Volt Buttons: dark stealth text on neon green */
+button.bg-primary,
+.btn-primary,
+button.bg-primary *,
+.btn-primary * {
+  color: #080b11 !important;
+}
+
+/* White Action Buttons (Login, Register, ErrorBoundary): crisp white bg with black text */
+button.bg-white,
+.btn-white,
+button[class*="bg-white"],
+button[class*="bg-white"] *,
+[class*="bg-white"][class*="text-black"],
+[class*="bg-white"][class*="text-black"] * {
+  background-color: #ffffff !important;
+  color: #080b11 !important;
+}
+
+/* Protect isolated text-black on dark background surfaces */
+body .text-black:not(button.bg-white *):not(.bg-white *):not(button.bg-primary *):not(.bg-primary *):not([class*="bg-primary"] *):not([class*="bg-white"] *) {
+  color: #f8fafc !important;
+}
+
+/* Stealth Cards styled with bg-white: transform to dark cards */
+div.bg-white:not([class*="text-black"]):not(button):not(button *),
+section.bg-white,
+article.bg-white {
+  background-color: #111726 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Stealth Inputs styled with bg-white */
+input.bg-white,
+textarea.bg-white,
+select.bg-white {
+  background-color: #151d2e !important;
+  border-color: #1e293f !important;
+  color: #f8fafc !important;
+}
+
+/* Tinted icon badges in dark mode */
+.bg-blue-50 {
+  background-color: rgba(59, 130, 246, 0.15) !important;
+}
+.bg-green-50 {
+  background-color: rgba(34, 197, 94, 0.15) !important;
+}
+.bg-orange-50 {
+  background-color: rgba(249, 115, 22, 0.15) !important;
+}
+.bg-red-50 {
+  background-color: rgba(239, 68, 68, 0.15) !important;
+}
+.bg-violet-50 {
+  background-color: rgba(139, 92, 246, 0.15) !important;
+}
+.bg-slate-50,
+.bg-slate-100 {
+  background-color: #151d2e !important;
 }
 
 /* Glass & Volt kinetic utilities */

@@ -451,7 +451,7 @@ export default function Register() {
                             <p className="text-sm text-slate-400">Benvenuto in OnlyGym, {formData.name}!</p>
                         </div>
                         <button onClick={() => navigate("/")}
-                            className="w-full py-4 bg-white text-black font-bold uppercase tracking-widest rounded-xl shadow-lg shadow-white/10 hover:bg-slate-100 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                            className="w-full py-4 bg-primary text-slate-950 font-black uppercase tracking-widest rounded-xl shadow-lg shadow-primary/25 hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] transition-all">
                             Inizia Ora 🚀
                         </button>
                     </div>
@@ -465,7 +465,7 @@ export default function Register() {
 
                 {step < 5 && (
                     <button onClick={handleContinue} disabled={loading || otpSending}
-                        className={`w-full py-4 font-bold uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-2 ${loading || otpSending ? 'bg-slate-800 text-slate-500' : 'bg-white text-black shadow-lg shadow-white/10 hover:bg-slate-100 hover:scale-[1.02] active:scale-[0.98]'}`}>
+                        className={`w-full py-4 font-black uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-2 ${loading || otpSending ? 'bg-slate-800 text-slate-500' : 'bg-primary text-slate-950 shadow-lg shadow-primary/25 hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98]'}`}>
                         {loading ? <span className="animate-pulse">Caricamento...</span> : step === 3 ? <>Verifica Codice <span className="material-symbols-outlined text-lg">check_circle</span></> : <>Continua <span className="material-symbols-outlined text-lg">arrow_forward</span></>}
                     </button>
                 )}

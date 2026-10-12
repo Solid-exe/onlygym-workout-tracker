@@ -57,29 +57,29 @@ export default function Plans() {
         <div className="p-4 pt-12 pb-24 max-w-md mx-auto min-h-screen relative bg-background">
             <div className="flex justify-between items-center mb-8">
                 <div>
-                    <h1 className="text-3xl font-black italic text-slate-900 uppercase -skew-x-6 leading-none">
+                    <h1 className="text-3xl font-black italic text-white uppercase -skew-x-6 leading-none">
                         Le tue <span className="text-primary not-italic">Schede</span>
                     </h1>
                     <p className="text-xs text-slate-400 font-bold uppercase mt-1">Gestisci i tuoi workout</p>
                 </div>
                 <div className="flex gap-3">
                     <button onClick={() => navigate('/plans/new')}
-                        className="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center hover:bg-primary/90 transition-all shadow-md shadow-primary/20 active:scale-90"
+                        className="w-12 h-12 rounded-full bg-primary text-slate-950 flex items-center justify-center hover:bg-primary/90 transition-all shadow-md shadow-primary/20 active:scale-90 font-black"
                         title="Nuova Scheda">
-                        <span className="material-symbols-outlined">add</span>
+                        <span className="material-symbols-outlined font-black">add</span>
                     </button>
                 </div>
             </div>
 
             <div className="space-y-4 animate-in slide-in-from-bottom-8 duration-500">
                 {plans.length === 0 ? (
-                    <div className="text-center py-12 border-2 border-dashed border-slate-200 rounded-2xl bg-white/50 shadow-sm">
-                        <span className="material-symbols-outlined text-slate-300 text-5xl mb-3 block">fitness_center</span>
+                    <div className="text-center py-12 border-2 border-dashed border-slate-800 rounded-2xl bg-[#111726]/50 shadow-sm">
+                        <span className="material-symbols-outlined text-slate-400 text-5xl mb-3 block">fitness_center</span>
                         <p className="text-slate-400 font-bold uppercase tracking-widest text-xs mb-4">Nessuna scheda attiva</p>
                         <div className="flex flex-col gap-3 max-w-[200px] mx-auto">
                             <button onClick={() => navigate('/plans/new')}
-                                className="px-4 py-3 bg-primary text-white font-bold uppercase text-xs rounded-xl hover:bg-primary/90 transition-all shadow-md shadow-primary/20 flex items-center justify-center gap-2">
-                                <span className="material-symbols-outlined text-sm">add</span>
+                                className="px-4 py-3 bg-primary text-slate-950 font-black uppercase text-xs rounded-xl hover:bg-primary/90 transition-all shadow-md shadow-primary/20 flex items-center justify-center gap-2">
+                                <span className="material-symbols-outlined text-sm font-black">add</span>
                                 <span>Crea Scheda</span>
                             </button>
                         </div>
@@ -87,22 +87,22 @@ export default function Plans() {
                 ) : (
                     plans.map((plan) => (
                         <div key={plan.id} onClick={() => handleStart(plan.id)}
-                            className="group bg-white border border-slate-100 rounded-2xl p-5 active:scale-[0.98] transition-all cursor-pointer hover:border-primary/30 relative overflow-hidden shadow-sm">
+                            className="group bg-[#111726] border border-slate-800 rounded-2xl p-5 active:scale-[0.98] transition-all cursor-pointer hover:border-primary/40 relative overflow-hidden shadow-sm">
                             <div className="flex justify-between items-start mb-3">
-                                <div className="bg-slate-50 border border-slate-200 text-[10px] font-black text-slate-500 px-2 py-1 rounded uppercase tracking-[0.2em]">
+                                <div className="bg-[#151d2e] border border-slate-700/60 text-[10px] font-black text-slate-300 px-2.5 py-1 rounded-md uppercase tracking-[0.2em]">
                                     {plan.days || '3gg'}
                                 </div>
                                 <div className="flex gap-2 -mr-2 -mt-2">
                                     {!plan.isAssigned && (
-                                        <button onClick={(e) => { e.stopPropagation(); navigate(`/plans/new?editId=${plan.id}`); }} className="p-2 text-slate-300 hover:text-blue-500 hover:bg-blue-50 hover:scale-110 rounded-xl transition-all" title="Modifica Scheda">
+                                        <button onClick={(e) => { e.stopPropagation(); navigate(`/plans/new?editId=${plan.id}`); }} className="p-2 text-slate-400 hover:text-blue-400 hover:bg-blue-500/10 hover:scale-110 rounded-xl transition-all" title="Modifica Scheda">
                                             <span className="material-symbols-outlined text-xl">edit</span>
                                         </button>
                                     )}
-                                    <button onClick={(e) => handleExportPDF(e, plan)} className="p-2 text-slate-300 hover:text-primary hover:scale-110 transition-all" title="Scarica PDF">
+                                    <button onClick={(e) => handleExportPDF(e, plan)} className="p-2 text-slate-400 hover:text-primary hover:scale-110 transition-all" title="Scarica PDF">
                                         <span className="material-symbols-outlined text-xl">download</span>
                                     </button>
                                     {!plan.isAssigned && (
-                                        <button onClick={(e) => handleDelete(e, plan.id, plan.name)} className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 hover:scale-110 rounded-xl transition-all" title="Elimina Scheda">
+                                        <button onClick={(e) => handleDelete(e, plan.id, plan.name)} className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-500/10 hover:scale-110 rounded-xl transition-all" title="Elimina Scheda">
                                             <span className="material-symbols-outlined text-xl">delete</span>
                                         </button>
                                     )}
@@ -111,12 +111,12 @@ export default function Plans() {
                             <div className="absolute top-1/2 right-4 -translate-y-1/2 opacity-0 group-hover:opacity-10 opacity-100 transition-opacity translate-x-2 group-hover:translate-x-0 duration-300 pointer-events-none">
                                 <span className="material-symbols-outlined text-5xl text-primary/10">chevron_right</span>
                             </div>
-                            <h3 className="text-2xl font-black text-slate-900 mb-2 group-hover:text-primary transition-colors italic uppercase tracking-tighter w-[85%] truncate">{plan.name}</h3>
+                            <h3 className="text-2xl font-black text-white mb-2 group-hover:text-primary transition-colors italic uppercase tracking-tighter w-[85%] truncate">{plan.name}</h3>
                             <div className="flex items-center gap-3 mt-4 text-xs font-bold text-slate-400 uppercase tracking-wide">
-                                <span className="flex items-center gap-1">{plan.exercises.length} Ex</span>
-                                <span className="w-1 h-1 rounded-full bg-slate-300"></span>
-                                <span className="text-slate-500">{plan.duration_weeks || 4} Settimane</span>
-                                <span className="w-1 h-1 rounded-full bg-slate-300"></span>
+                                <span className="flex items-center gap-1 text-slate-300">{plan.exercises.length} Ex</span>
+                                <span className="w-1 h-1 rounded-full bg-slate-700"></span>
+                                <span className="text-slate-400">{plan.duration_weeks || 4} Settimane</span>
+                                <span className="w-1 h-1 rounded-full bg-slate-700"></span>
                                 <span className="text-slate-400 truncate max-w-[80px]">Ultimo: {plan.lastPerformed ? new Date(plan.lastPerformed).toLocaleDateString() : 'Mai'}</span>
                             </div>
                         </div>
@@ -125,8 +125,8 @@ export default function Plans() {
             </div>
 
             {showRequestModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-[2px] p-4 animate-in fade-in pt-16">
-                    <div className="bg-white border border-slate-100 w-full max-w-sm rounded-3xl p-6 relative shadow-2xl flex flex-col max-h-[85vh] overflow-y-auto">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in pt-16">
+                    <div className="bg-[#111726] border border-slate-800 w-full max-w-sm rounded-3xl p-6 relative shadow-2xl flex flex-col max-h-[85vh] overflow-y-auto">
                         <button onClick={() => { setShowRequestModal(false); setStep(1); setFormData({ ...formData, coach_id: null, location: null }); }}
                             className="absolute top-4 right-4 text-slate-400 hover:text-red-500 bg-slate-50 hover:bg-red-50 rounded-full p-2 transition-all">
                             <span className="material-symbols-outlined text-lg block">close</span>
