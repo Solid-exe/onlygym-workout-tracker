@@ -16,6 +16,7 @@ export default function Home() {
         }
     });
     const [showFeedback, setShowFeedback] = useState(false);
+    const unreadCount = Array.isArray(notifications) ? notifications.filter(n => !n.read).length : 0;
 
     useEffect(() => {
         if (!authToken || !userProfile.email) {
