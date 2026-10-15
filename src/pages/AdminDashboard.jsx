@@ -5,6 +5,20 @@ import { supabase } from "../lib/supabase";
 import VideoManagementSection from "../components/VideoManagementSection";
 import FeedbackModal from "../components/FeedbackModal";
 import AIGeneratorModal from "../components/AIGeneratorModal";
+import { validateImageFile, generateSecureFileName } from "../utils/fileValidation";
+
+const safeGetTokenSub = (token) => {
+    if (!token || typeof token !== 'string') return null;
+    try {
+        const parts = token.split('.');
+        if (parts.length < 2) return null;
+        const base64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+        return JSON.parse(jsonPayload)?.sub || null;
+    } catch {
+        return null;
+    }
+};
 
 // --- SUB-COMPONENTS ---
 
@@ -174,15 +188,11 @@ export default function AdminDashboard() {
 
     // Video Management State
     const [exerciseVideos, setExerciseVideos] = useState([]);
-    const [uploadingVideo, setUploadingVideo] = useState(false);
-    const [newVideoFile, setNewVideoFile] = useState(null);
-    const [newVideoExerciseName, setNewVideoExerciseName] = useState('');
 
     // Exercise Library State
     const [exerciseLibrary, setExerciseLibrary] = useState([]);
     const [loadingLibrary, setLoadingLibrary] = useState(false);
     const [newExercise, setNewExercise] = useState({ name: '', muscle_group: 'petto', description: '' });
-    const [newExerciseVideoFile, setNewExerciseVideoFile] = useState(null);
     const [savingExercise, setSavingExercise] = useState(false);
     const [exerciseVideoPreview, setExerciseVideoPreview] = useState(null);
     const [libraryFilter, setLibraryFilter] = useState('');
@@ -360,31 +370,19 @@ export default function AdminDashboard() {
         if (!newExercise.name.trim()) return alert('Inserisci il nome dell\'esercizio.');
         setSavingExercise(true);
         try {
-            let videoUrl = null;
-            if (newExerciseVideoFile) {
-                const ext = newExerciseVideoFile.name.split('.').pop();
-                const fileName = `ex_${Math.random().toString(36).substring(2)}.${ext}`;
-                const { error: uploadErr } = await supabase.storage
-                    .from('exercise-videos')
-                    .upload(fileName, newExerciseVideoFile);
-                if (uploadErr) throw uploadErr;
-                const { data: { publicUrl } } = supabase.storage.from('exercise-videos').getPublicUrl(fileName);
-                videoUrl = publicUrl;
-            }
             const { data, error } = await supabase
                 .from('exercise_library')
                 .insert({
                     name: newExercise.name.trim(),
                     muscle_group: newExercise.muscle_group,
                     description: newExercise.description.trim() || null,
-                    video_url: videoUrl
+                    video_url: null
                 })
                 .select()
                 .single();
             if (error) throw error;
             setExerciseLibrary(prev => [data, ...prev]);
             setNewExercise({ name: '', muscle_group: 'petto', description: '' });
-            setNewExerciseVideoFile(null);
             alert('✅ Esercizio aggiunto all\'archivio!');
         } catch (e) {
             alert('Errore: ' + e.message);
@@ -451,11 +449,18 @@ export default function AdminDashboard() {
 
         // Upload immagine su Supabase Storage se è stato selezionato un file
         if (broadcastImageFile) {
-            const ext = broadcastImageFile.name.split('.').pop();
-            const fileName = `${crypto.randomUUID()}.${ext}`;
+            const validation = validateImageFile(broadcastImageFile, 10);
+            if (!validation.valid) {
+                setSendingBroadcast(false);
+                return alert(validation.error);
+            }
+            const fileName = generateSecureFileName(validation.safeExtension, 'broadcast');
             const { error: uploadError } = await supabase.storage
                 .from('broadcasts')
-                .upload(fileName, broadcastImageFile, { upsert: false });
+                .upload(fileName, broadcastImageFile, {
+                    upsert: false,
+                    contentType: broadcastImageFile.type
+                });
 
             if (uploadError) {
                 setSendingBroadcast(false);
@@ -601,40 +606,7 @@ export default function AdminDashboard() {
         }
     };
 
-    const handleUploadVideo = async () => {
-        if (!newVideoFile || !newVideoExerciseName) return;
-        setUploadingVideo(true);
 
-        try {
-            const fileExt = newVideoFile.name.split('.').pop();
-            const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
-            const filePath = `${fileName}`;
-
-            const { error: uploadError } = await supabase.storage.from('exercise-videos').upload(filePath, newVideoFile);
-            if (uploadError) throw uploadError;
-
-            const { data: { publicUrl } } = supabase.storage.from('exercise-videos').getPublicUrl(filePath);
-
-            const { data: videoData, error: dbError } = await supabase.from('exercise_videos').insert({
-                exercise_name: newVideoExerciseName,
-                video_url: publicUrl,
-                filename: filePath
-            }).select().single();
-
-            if (dbError) throw dbError;
-
-            setExerciseVideos([videoData, ...exerciseVideos]);
-            setStats(prev => ({ ...prev, videos: prev.videos + 1 }));
-            setNewVideoFile(null);
-            setNewVideoExerciseName('');
-            alert("✅ Video caricato con successo!");
-        } catch (error) {
-            console.error("Upload error:", error);
-            alert("Errore caricamento video: " + error.message);
-        } finally {
-            setUploadingVideo(false);
-        }
-    };
 
     const handleDeleteVideo = async (video) => {
         if (!confirm(`Eliminare il video di ${video.exercise_name}?`)) return;
@@ -1162,43 +1134,7 @@ export default function AdminDashboard() {
                                 />
                             </div>
 
-                            {/* Video opzionale */}
-                            <div className="space-y-1.5">
-                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Video Dimostrativo (opzionale)</label>
-                                <label className="flex items-center gap-4 border-2 border-dashed border-slate-200 rounded-2xl p-4 cursor-pointer hover:border-primary/50 hover:bg-primary/5 transition-all group">
-                                    <input
-                                        type="file"
-                                        accept="video/*"
-                                        className="hidden"
-                                        onChange={e => {
-                                            const file = e.target.files?.[0];
-                                            if (!file) return;
-                                            if (file.size > 100 * 1024 * 1024) return alert('Video troppo grande (max 100MB)');
-                                            setNewExerciseVideoFile(file);
-                                        }}
-                                    />
-                                    <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/10 transition-colors">
-                                        <span className="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>
-                                            {newExerciseVideoFile ? 'videocam' : 'add_circle'}
-                                        </span>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm font-black text-slate-700 group-hover:text-primary transition-colors">
-                                            {newExerciseVideoFile ? newExerciseVideoFile.name : 'Carica video (MP4, MOV, AVI)'}
-                                        </p>
-                                        <p className="text-[10px] font-bold text-slate-400 uppercase mt-0.5">Max 100MB</p>
-                                    </div>
-                                    {newExerciseVideoFile && (
-                                        <button
-                                            type="button"
-                                            onClick={e => { e.preventDefault(); setNewExerciseVideoFile(null); }}
-                                            className="ml-auto text-slate-300 hover:text-red-500 p-1.5 rounded-lg hover:bg-red-50 transition-colors"
-                                        >
-                                            <span className="material-symbols-outlined text-[18px]">close</span>
-                                        </button>
-                                    )}
-                                </label>
-                            </div>
+
 
                             <button
                                 onClick={handleAddExercise}
@@ -1331,12 +1267,6 @@ export default function AdminDashboard() {
                 return (
                     <VideoManagementSection
                         exerciseVideos={exerciseVideos}
-                        newVideoExerciseName={newVideoExerciseName}
-                        setNewVideoExerciseName={setNewVideoExerciseName}
-                        newVideoFile={newVideoFile}
-                        setNewVideoFile={setNewVideoFile}
-                        uploadingVideo={uploadingVideo}
-                        handleUploadVideo={handleUploadVideo}
                         handleDeleteVideo={handleDeleteVideo}
                     />
                 );
@@ -1780,7 +1710,7 @@ export default function AdminDashboard() {
                 {showFeedbackModal && (
                     <FeedbackModal
                         onClose={() => setShowFeedbackModal(false)}
-                        userId={userProfile?.id || (authToken ? JSON.parse(atob(authToken.split('.')[1])).sub : null)}
+                        userId={userProfile?.id || safeGetTokenSub(authToken)}
                     />
                 )}
                 {/* Mobile Header */}

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useStore } from "../lib/store";
 import { supabase } from "../lib/supabase";
 
+
 // ─── MAIN PAGE ─────────────────────────────────────────────────────────────────
 export default function CoachDashboard() {
     const navigate = useNavigate();
@@ -21,10 +22,6 @@ export default function CoachDashboard() {
     const [expiryNotifications, setExpiryNotifications] = useState([]);
     const [unreadNotifCount, setUnreadNotifCount] = useState(0);
 
-    // Video upload
-    const [newVideoFile, setNewVideoFile] = useState(null);
-    const [newVideoExerciseName, setNewVideoExerciseName] = useState('');
-    const [uploadingVideo, setUploadingVideo] = useState(false);
     const [newRequestToast, setNewRequestToast] = useState(false);
 
     // Templates State
@@ -34,7 +31,6 @@ export default function CoachDashboard() {
     const [exerciseLibrary, setExerciseLibrary] = useState([]);
     const [loadingLibrary, setLoadingLibrary] = useState(false);
     const [newExercise, setNewExercise] = useState({ name: '', muscle_group: 'petto', description: '' });
-    const [newExerciseVideoFile, setNewExerciseVideoFile] = useState(null);
     const [savingExercise, setSavingExercise] = useState(false);
     const [exerciseVideoPreview, setExerciseVideoPreview] = useState(null);
     const [libraryFilter, setLibraryFilter] = useState('');
@@ -173,31 +169,19 @@ export default function CoachDashboard() {
         if (!newExercise.name.trim()) return alert('Inserisci il nome dell\'esercizio.');
         setSavingExercise(true);
         try {
-            let videoUrl = null;
-            if (newExerciseVideoFile) {
-                const ext = newExerciseVideoFile.name.split('.').pop();
-                const fileName = `ex_${Math.random().toString(36).substring(2)}.${ext}`;
-                const { error: uploadErr } = await supabase.storage
-                    .from('exercise-videos')
-                    .upload(fileName, newExerciseVideoFile);
-                if (uploadErr) throw uploadErr;
-                const { data: { publicUrl } } = supabase.storage.from('exercise-videos').getPublicUrl(fileName);
-                videoUrl = publicUrl;
-            }
             const { data, error } = await supabase
                 .from('exercise_library')
                 .insert({
                     name: newExercise.name.trim(),
                     muscle_group: newExercise.muscle_group,
                     description: newExercise.description.trim() || null,
-                    video_url: videoUrl
+                    video_url: null
                 })
                 .select()
                 .single();
             if (error) throw error;
             setExerciseLibrary(prev => [data, ...prev]);
             setNewExercise({ name: '', muscle_group: 'petto', description: '' });
-            setNewExerciseVideoFile(null);
             alert('✅ Esercizio aggiunto all\'archivio!');
         } catch (e) {
             alert('Errore: ' + e.message);
@@ -285,31 +269,7 @@ export default function CoachDashboard() {
         }
     };
 
-    const handleUploadVideo = async () => {
-        if (!newVideoFile || !newVideoExerciseName.trim()) return alert("Inserisci nome esercizio e seleziona un video.");
-        setUploadingVideo(true);
-        try {
-            const fileExt = newVideoFile.name.split('.').pop();
-            const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
-            const { error: uploadError } = await supabase.storage.from('exercise-videos').upload(fileName, newVideoFile);
-            if (uploadError) throw uploadError;
-            const { data: { publicUrl } } = supabase.storage.from('exercise-videos').getPublicUrl(fileName);
-            const { data: videoData, error: dbError } = await supabase
-                .from('exercise_videos')
-                .insert({ exercise_name: newVideoExerciseName, video_url: publicUrl, filename: fileName })
-                .select().single();
-            if (dbError) throw dbError;
-            setExerciseVideos(prev => [videoData, ...prev]);
-            setStats(prev => ({ ...prev, videos: prev.videos + 1 }));
-            setNewVideoFile(null);
-            setNewVideoExerciseName('');
-            alert("✅ Video caricato con successo!");
-        } catch (e) {
-            alert("Errore upload: " + e.message);
-        } finally {
-            setUploadingVideo(false);
-        }
-    };
+
 
     const handleDeleteVideo = async (video) => {
         if (!confirm(`Eliminare il video di ${video.exercise_name}?`)) return;
@@ -614,35 +574,7 @@ export default function CoachDashboard() {
                     <div className="space-y-6 animate-in fade-in">
                         <h2 className="text-2xl font-bold text-slate-900 uppercase">Video Esercizi</h2>
 
-                        {/* Upload Form */}
-                        <div className="bg-white rounded-xl border border-primary/20 p-6 space-y-4 shadow-sm">
-                            <h3 className="font-bold text-slate-900 flex items-center gap-2">
-                                <span className="material-symbols-outlined text-primary">upload</span> Carica Nuovo Video
-                            </h3>
-                            <div className="flex flex-col md:flex-row gap-3">
-                                <input
-                                    type="text"
-                                    placeholder="Nome esercizio (es. Squat)"
-                                    value={newVideoExerciseName}
-                                    onChange={e => setNewVideoExerciseName(e.target.value)}
-                                    className="flex-1 bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:border-primary placeholder-slate-400"
-                                />
-                                <label className="flex-1 md:flex-none cursor-pointer">
-                                    <div className="bg-slate-50 border border-slate-200 text-slate-500 rounded-xl px-4 py-3 text-sm font-medium hover:border-primary transition-colors flex items-center gap-2 justify-center">
-                                        <span className="material-symbols-outlined text-sm">movie</span>
-                                        {newVideoFile ? newVideoFile.name.substring(0, 20) + '...' : 'Scegli video'}
-                                    </div>
-                                    <input type="file" accept="video/*" onChange={e => setNewVideoFile(e.target.files[0])} className="hidden" />
-                                </label>
-                                <button
-                                    onClick={handleUploadVideo}
-                                    disabled={uploadingVideo}
-                                    className="px-6 py-3 font-bold uppercase text-sm rounded-xl text-white bg-primary disabled:opacity-50 flex items-center gap-2 transition-all shadow-lg shadow-primary/20"
-                                >
-                                    {uploadingVideo ? <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> Carico...</> : <><span className="material-symbols-outlined text-sm">upload</span> Carica</>}
-                                </button>
-                            </div>
-                        </div>
+
 
                         {/* Video Grid */}
                         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -795,43 +727,7 @@ export default function CoachDashboard() {
                                 />
                             </div>
 
-                            {/* Video opzionale */}
-                            <div className="space-y-1.5">
-                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Video Dimostrativo (opzionale)</label>
-                                <label className="flex items-center gap-4 border-2 border-dashed border-slate-200 rounded-2xl p-4 cursor-pointer hover:border-primary/50 hover:bg-primary/5 transition-all group">
-                                    <input
-                                        type="file"
-                                        accept="video/*"
-                                        className="hidden"
-                                        onChange={e => {
-                                            const file = e.target.files?.[0];
-                                            if (!file) return;
-                                            if (file.size > 100 * 1024 * 1024) return alert('Video troppo grande (max 100MB)');
-                                            setNewExerciseVideoFile(file);
-                                        }}
-                                    />
-                                    <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/10 transition-colors">
-                                        <span className="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>
-                                            {newExerciseVideoFile ? 'videocam' : 'add_circle'}
-                                        </span>
-                                    </div>
-                                    <div className="min-w-0 flex-1">
-                                        <p className="text-sm font-bold text-slate-700 group-hover:text-primary transition-colors truncate">
-                                            {newExerciseVideoFile ? newExerciseVideoFile.name : 'Carica video (MP4, MOV, AVI)'}
-                                        </p>
-                                        <p className="text-[10px] font-bold text-slate-400 uppercase mt-0.5">Max 100MB</p>
-                                    </div>
-                                    {newExerciseVideoFile && (
-                                        <button
-                                            type="button"
-                                            onClick={e => { e.preventDefault(); setNewExerciseVideoFile(null); }}
-                                            className="ml-auto text-slate-300 hover:text-red-500 p-1.5 rounded-lg hover:bg-red-50 transition-colors"
-                                        >
-                                            <span className="material-symbols-outlined text-[18px]">close</span>
-                                        </button>
-                                    )}
-                                </label>
-                            </div>
+
 
                             <button
                                 onClick={handleAddExercise}

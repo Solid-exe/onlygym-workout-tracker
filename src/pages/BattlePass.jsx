@@ -16,7 +16,6 @@ export default function BattlePass() {
     const { history, userProfile } = useStore();
     
     const [loading, setLoading] = useState(true);
-    const [seeding, setSeeding] = useState(false);
     const [gymInfo, setGymInfo] = useState({ name: "ONLYGYM ARENA", country: "IT", timezone: "Europe/Rome" });
     const [season, setSeason] = useState({ name: "Stagione 1: Titan Genesis" });
     
@@ -36,8 +35,6 @@ export default function BattlePass() {
     // Personalizzazioni equipaggiate
     const [customizations, setCustomizations] = useState(getEquippedCustomizations());
     const [feedbackMsg, setFeedbackMsg] = useState("");
-
-    const DEMO_STORAGE_KEY = "onlygym_demo_battlepass";
 
     const getDefaultDemoData = () => ({
         gymInfo: { name: "ONLYGYM ARENA", country: "IT", timezone: "Europe/Rome" },

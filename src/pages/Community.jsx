@@ -4,6 +4,7 @@ import PostCard from "../components/PostCard";
 import Leaderboard from "../components/Leaderboard";
 import ChallengesTab from "../components/ChallengesTab";
 import { moderation } from "../lib/moderation";
+import { validateMediaFile, generateSecureFileName } from "../utils/fileValidation";
 
 export default function Community() {
     const [posts, setPosts] = useState([]);
@@ -119,8 +120,10 @@ export default function Community() {
         const file = e.target.files[0];
         if (!file) return;
         
-        if (file.size > 10 * 1024 * 1024) {
-            alert("File troppo grande (Max 10MB)");
+        const validation = validateMediaFile(file, 10, 50);
+        if (!validation.valid) {
+            alert(validation.error);
+            e.target.value = "";
             return;
         }
 
@@ -149,21 +152,33 @@ export default function Community() {
         let mediaType = null;
 
         if (mediaFile) {
+            const validation = validateMediaFile(mediaFile, 10, 50);
+            if (!validation.valid) {
+                alert(validation.error);
+                setIsPosting(false);
+                return;
+            }
+
             setUploadingMedia(true);
-            const fileExt = mediaFile.name.split('.').pop();
-            const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+            const fileName = generateSecureFileName(validation.safeExtension, 'post');
             
             try {
                 const { error: uploadError } = await supabase.storage
                     .from('community_media')
-                    .upload(fileName, mediaFile);
+                    .upload(fileName, mediaFile, {
+                        upsert: false,
+                        contentType: mediaFile.type
+                    });
 
                 if (!uploadError) {
                     const { data: { publicUrl } } = supabase.storage
                         .from('community_media')
                         .getPublicUrl(fileName);
                     mediaUrl = publicUrl;
-                    mediaType = mediaFile.type.startsWith('video/') ? 'video' : 'image';
+                    mediaType = validation.mediaType;
+                } else {
+                    console.error("Upload error", uploadError);
+                    alert("Errore caricamento media: " + uploadError.message);
                 }
             } catch (e) {
                 console.error("Upload error", e);

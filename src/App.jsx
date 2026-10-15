@@ -14,14 +14,10 @@ import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import WorkoutSession from "./pages/WorkoutSession";
-import Badges from "./pages/Badges";
 import Progress from "./pages/Progress";
-import Community from "./pages/Community";
 import BattlePass from "./pages/BattlePass";
 import Notifications from "./pages/Notifications";
 import Chat from "./pages/Chat";
-import AdminDashboard from "./pages/AdminDashboard";
-import CoachDashboard from "./pages/CoachDashboard";
 import BadgeUnlockedModal from "./components/BadgeUnlockedModal";
 import SplashScreen from "./components/SplashScreen";
 import BroadcastPopup from "./components/BroadcastPopup";
@@ -164,7 +160,7 @@ export default function App() {
                     <Route path="/settings" element={<ErrorBoundary><Settings /></ErrorBoundary>} />
                     <Route path="/privacy" element={<Privacy />} />
                     <Route path="/certificate" element={<Navigate to="/" replace />} />
-                    <Route path="/badges" element={<ErrorBoundary><Badges /></ErrorBoundary>} />
+                    <Route path="/badges" element={<Navigate to="/" replace />} />
                     <Route path="/analysis" element={<ErrorBoundary><Analysis /></ErrorBoundary>} />
                     <Route path="/progress" element={<ErrorBoundary><Progress /></ErrorBoundary>} />
                     <Route path="/progress/:exerciseName" element={<ErrorBoundary><Progress /></ErrorBoundary>} />

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { supabase } from "../lib/supabase";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://kmuovijjgivwupluuruh.supabase.co';
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttdW92aWpqZ2l2d3VwbHV1cnVoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3MzIwODAsImV4cCI6MjA4NjMwODA4MH0.81BtKuXTM15XuoE5PzWjwCzIwL5WbjQtqhWkMd3t_b4';
@@ -45,11 +46,14 @@ export default function AIGeneratorModal({ onClose, onPlanGenerated }) {
         setError(null);
 
         try {
+            const { data: sessionData } = await supabase.auth.getSession();
+            const authToken = sessionData?.session?.access_token || SUPABASE_ANON_KEY;
+
             const res = await fetch(`${SUPABASE_URL}/functions/v1/generate-plan`, {
                 method: "POST",
                 headers: { 
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+                    "Authorization": `Bearer ${authToken}`
                 },
                 body: JSON.stringify(form)
             });

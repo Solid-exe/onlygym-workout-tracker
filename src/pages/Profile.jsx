@@ -5,10 +5,11 @@ import { useStore } from "../lib/store";
 import { supabase } from "../lib/supabase";
 import { admobService } from "../services/admob";
 import { getEquippedCustomizations, getAvatarFrameClass } from "../services/customization";
+import { validateImageFile, generateSecureFileName } from "../utils/fileValidation";
 
 export default function Profile() {
     const navigate = useNavigate();
-    const { userProfile, logout, updateProfile, badges, history } = useStore();
+    const { userProfile, logout, updateProfile, history } = useStore();
     const [isEditingName, setIsEditingName] = useState(false);
     const [newName, setNewName] = useState(userProfile.name);
     const [uploadingAvatar, setUploadingAvatar] = useState(false);
@@ -60,15 +61,22 @@ export default function Profile() {
     const handleFileChange = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
-        if (!file.type.startsWith('image/')) { alert("Seleziona un'immagine valida."); return; }
-        if (file.size > 5 * 1024 * 1024) { alert("Immagine troppo grande (max 5MB)."); return; }
+
+        const validation = validateImageFile(file, 5);
+        if (!validation.valid) {
+            alert(validation.error);
+            return;
+        }
+
         setUploadingAvatar(true);
         try {
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) throw new Error("Utente non autenticato");
-            const fileExt = file.name.split('.').pop();
-            const fileName = `${user.id}-${Date.now()}.${fileExt}`;
-            const { error: uploadError } = await supabase.storage.from('avatars').upload(fileName, file);
+            const fileName = `${user.id}/${generateSecureFileName(validation.safeExtension, 'avatar')}`;
+            const { error: uploadError } = await supabase.storage.from('avatars').upload(fileName, file, {
+                upsert: true,
+                contentType: file.type
+            });
             if (uploadError) throw uploadError;
             const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(fileName);
             await updateProfile({ avatar_url: publicUrl });
@@ -85,7 +93,6 @@ export default function Profile() {
         { icon: 'shield', label: "Privacy & Sicurezza", to: "/privacy" },
         { icon: 'calendar_month', label: "Storico Allenamenti", to: "/history" },
         { icon: 'trending_up', label: "Progressione", to: "/progress" },
-        { icon: 'emoji_events', label: "Badge & Traguardi", to: "/badges", badge: badges.length > 0 ? badges.length : null },
     ];
 
     return (
@@ -175,7 +182,7 @@ export default function Profile() {
                         </div>
                         <div>
                             <h4 className="text-sm font-bold text-white">Rimuovi Pubblicità per Sempre</h4>
-                            <p className="text-xs text-slate-300 mt-0.5">Naviga e allenati senza annunci pubblicitari e supporta lo sviluppo dell'app.</p>
+                            <p className="text-xs text-slate-300 mt-0.5">Naviga e allenati senza annunci pubblicitari e supporta lo sviluppo dell&apos;app.</p>
                         </div>
                         <div className="flex gap-2 mt-1">
                             <button

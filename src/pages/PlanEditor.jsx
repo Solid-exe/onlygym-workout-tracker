@@ -131,6 +131,9 @@ export default function PlanEditor() {
         if (validDays.length === 0) return alert("Aggiungi almeno un esercizio in un giorno!");
 
         if (isTemplate) {
+            if (!['admin', 'trainer', 'coach'].includes(userProfile?.role)) {
+                return alert("Non disponi dei permessi per gestire modelli di allenamento globali.");
+            }
             if (editTplId) {
                 if (window.confirm(`Vuoi aggiornare il template "${name}"?`)) {
                     const { error } = await supabase.from('workout_templates').update({

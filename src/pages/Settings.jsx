@@ -5,33 +5,15 @@ import ChangelogModal, { APP_VERSION } from "../components/ChangelogModal";
 
 export default function Settings() {
     const navigate = useNavigate();
-    const { userProfile, setTrainingDays, resetStats, resetBadges, isDarkMode, toggleDarkMode, isHealthConnected, connectHealth, disconnectHealth } = useStore();
+    const { userProfile, setTrainingDays, resetStats, isDarkMode, toggleDarkMode } = useStore();
     const [days, setDays] = useState(userProfile.trainingDaysGoal);
-    const [connectingHealth, setConnectingHealth] = useState(false);
     const [showChangelog, setShowChangelog] = useState(false);
-
-    const handleHealthToggle = async () => {
-        if (isHealthConnected) {
-            if(confirm("Vuoi scollegare l'app Salute?")) disconnectHealth();
-        } else {
-            setConnectingHealth(true);
-            const success = await connectHealth();
-            setConnectingHealth(false);
-            if (!success) alert("Impossibile connettere Apple Health / Google Fit. Controlla i permessi.");
-        }
-    };
 
     const handleSave = () => { setTrainingDays(days); alert("Impostazioni salvate!"); navigate("/profile"); };
 
     const handleReset = async () => {
         if (confirm("SEI SICURO? Questo cancellerà tutti i record, lo storico e lo streak. Non puoi annullare.")) {
             await resetStats(); alert("Dati azzerati. L'app verrà riavviata."); window.location.reload();
-        }
-    };
-
-    const handleResetBadges = async () => {
-        if (confirm("Vuoi davvero cancellare tutti i badge ottenuti? Non si può annullare.")) {
-            await resetBadges(); alert("Badge eliminati. L'app verrà riavviata."); window.location.reload();
         }
     };
 
@@ -79,28 +61,7 @@ export default function Settings() {
                 </div>
 
                 <div className="space-y-4">
-                    <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest pl-2 border-l-2 border-slate-700">Dispositivi</h2>
-                    <div className="bg-[#111726] border border-slate-800 rounded-xl overflow-hidden shadow-sm p-4 flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${isHealthConnected ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-800 text-slate-400'}`}>
-                                <span className="material-symbols-outlined">{isHealthConnected ? 'favorite' : 'watch'}</span>
-                            </div>
-                            <div>
-                                <span className="font-bold text-white text-sm block leading-tight">Apple Health / Fit</span>
-                                <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
-                                    {isHealthConnected ? 'Connesso' : 'Disconnesso'}
-                                </span>
-                            </div>
-                        </div>
-                        <button onClick={handleHealthToggle} disabled={connectingHealth}
-                            className={`w-12 h-6 rounded-full transition-colors relative flex items-center ${isHealthConnected ? 'bg-emerald-500' : 'bg-slate-700'} ${connectingHealth ? 'opacity-50' : ''}`}>
-                            <div className={`w-4 h-4 bg-slate-950 rounded-full mx-1 transition-transform ${isHealthConnected ? 'translate-x-6' : 'translate-x-0'} ${connectingHealth ? 'animate-pulse' : ''}`} />
-                        </button>
-                    </div>
-                </div>
-
-                <div className="space-y-4">
-                    <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest pl-2 border-l-2 border-slate-700">Privacy & Dati</h2>
+                    <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest pl-2 border-l-2 border-slate-700">Informazioni & Novità</h2>
                     <div className="bg-[#111726] border border-slate-800 rounded-xl overflow-hidden divide-y divide-slate-800/80 shadow-sm">
                         <div className="p-4 flex items-center justify-between">
                             <div className="flex items-center gap-3">
@@ -126,10 +87,6 @@ export default function Settings() {
                 {userProfile?.role === 'client' && (
                     <div className="pt-8 border-t border-slate-800 space-y-3">
                         <h2 className="text-xs font-bold text-red-400 uppercase tracking-widest mb-4">Area Pericolosa</h2>
-                        <button onClick={handleResetBadges}
-                            className="w-full py-4 bg-orange-500/10 border border-orange-500/30 text-orange-400 rounded-xl font-bold uppercase text-xs tracking-widest flex items-center justify-center gap-2 hover:bg-orange-500/20 transition-colors">
-                            <span className="material-symbols-outlined text-lg">shield</span> Azzera Badge
-                        </button>
                         <button onClick={handleReset}
                             className="w-full py-4 bg-red-500/10 border border-red-500/30 text-red-400 rounded-xl font-bold uppercase text-xs tracking-widest flex items-center justify-center gap-2 hover:bg-red-500/20 transition-colors">
                             <span className="material-symbols-outlined text-lg">delete_forever</span> Azzera Streak & Stats

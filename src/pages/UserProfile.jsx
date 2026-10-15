@@ -23,10 +23,10 @@ export default function UserProfile() {
         const { data: { user } } = await supabase.auth.getUser();
         if (user) setCurrentUserId(user.id);
 
-        // 1. Fetch Profile Data
+        // 1. Fetch Profile Data (Data Minimization: fetch only public fields)
         const { data: userData, error } = await supabase
             .from('profiles')
-            .select('*')
+            .select('id, name, avatar_url, created_at, workouts_completed, streak')
             .eq('id', userId)
             .single();
 

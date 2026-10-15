@@ -181,7 +181,8 @@ export function exportHistoryToPDF(history, userName = 'Utente') {
             return;
         }
 
-        doc.save(`Storico_${userName}_ONLYGYM.pdf`);
+        const safeUserName = (userName || 'Utente').replace(/[^a-zA-Z0-9_-]/g, '_');
+        doc.save(`Storico_${safeUserName}_ONLYGYM.pdf`);
     } catch (error) {
         console.error("Errore esportazione Storico PDF:", error);
         alert("Impossibile esportare storico");

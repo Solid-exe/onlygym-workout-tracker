@@ -189,6 +189,7 @@ CREATE OR REPLACE FUNCTION public.seed_user_engage_demo()
 RETURNS json
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path = public, pg_temp
 AS $$
 DECLARE
     v_user_id UUID;
@@ -202,14 +203,10 @@ DECLARE
     v_b2 UUID;
     v_b3 UUID;
 BEGIN
-    -- Identifica utente attuale (o fallback al primo profilo)
+    -- Identifica strettamente l'utente autenticato (prevenzione privilege escalation e data wiping)
     v_user_id := auth.uid();
     IF v_user_id IS NULL THEN
-        SELECT id INTO v_user_id FROM public.profiles LIMIT 1;
-    END IF;
-
-    IF v_user_id IS NULL THEN
-        RETURN json_build_object('success', false, 'message', 'Nessun utente trovato');
+        RAISE EXCEPTION 'Operazione non autorizzata: autenticazione obbligatoria';
     END IF;
 
     -- 1. Crea o recupera Palestra
@@ -310,4 +307,9 @@ BEGIN
     RETURN json_build_object('success', true, 'message', 'Battle Pass Demo attivato con successo!');
 END;
 $$;
+
+-- Restrizione privilegi: solo utenti autenticati possono invocare questa funzione
+REVOKE ALL ON FUNCTION public.seed_user_engage_demo() FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.seed_user_engage_demo() TO authenticated;
+
 

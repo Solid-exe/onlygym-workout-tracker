@@ -1,39 +1,39 @@
-export const APP_VERSION = "3.1.0";
+export const APP_VERSION = "3.2.0";
 
 export const CHANGELOG_DATA = {
     version: APP_VERSION,
-    title: "App Aggiornata!",
-    summary: "Benvenuto in OnlyGym: il tuo compagno d'allenamento completo per tutti i tuoi workout, ovunque ti alleni.",
+    title: "Novità dell'Aggiornamento v3.2.0",
+    summary: "Ecco le ultime novità e miglioramenti apportati a OnlyGym per rendere la tua esperienza di allenamento ancora più sicura, veloce e performante.",
     features: [
         {
-            icon: "bolt",
-            title: "Rebranding OnlyGym & Volt Kinetic Design",
-            desc: "Nuovo layout ad alto contrasto, tipografia fluida e palette Volt per massima concentrazione durante ogni serie."
+            icon: "military_tech",
+            title: "Battle Pass Stagionale & Ricompense Digitali",
+            desc: "Accumula XP completando workout e sfide. Sblocca temi cromatici esclusivi per l'app e cornici per il tuo avatar."
         },
         {
-            icon: "fitness_center",
-            title: "Tracker Aperto a Tutti",
-            desc: "Traccia i tuoi workout liberamente come atleta indipendente, a casa, in palestra o all'aperto."
+            icon: "security",
+            title: "Rafforzamento Sicurezza & Privacy",
+            desc: "Protezione avanzata per i caricamenti media, isolamento dei dati personali e policy di sicurezza HTTP potenziate."
+        },
+        {
+            icon: "tune",
+            title: "Interfaccia Pulita & Ottimizzata",
+            desc: "Menu impostazioni e profilo riorganizzati per la massima reattività, eliminando opzioni e tasti non più utilizzati."
+        },
+        {
+            icon: "auto_awesome",
+            title: "Generatore Schede AI Potenziato",
+            desc: "Crea all'istante schede di allenamento mirate basate sui tuoi obiettivi, attrezzatura a disposizione e giorni disponibili."
         },
         {
             icon: "calculate",
             title: "Calcolo Massimale 1RM Automatico",
-            desc: "Stima in tempo reale il tuo massimale 1RM e calcola le percentuali di carico ideali per i tuoi sollevamenti."
-        },
-        {
-            icon: "swap_horiz",
-            title: "Smart Swap Potenziato",
-            desc: "Scambio biomeccanico intelligente degli esercizi con alternative sempre disponibili anche a corpo libero o con manubri."
-        },
-        {
-            icon: "share",
-            title: "Condivisione Social & Stories",
-            desc: "Condividi i tuoi workout e badge su Instagram con un design ad alto contrasto e statistiche visibili."
+            desc: "Stima in tempo reale il tuo massimale 1RM e calcola le percentuali di carico ideali per ogni esercizio."
         },
         {
             icon: "picture_as_pdf",
-            title: "Esportazione Schede in PDF",
-            desc: "Scarica e stampa le tue schede d'allenamento in formato PDF pulito e professionale."
+            title: "Esportazione PDF Schede & Storico",
+            desc: "Scarica e stampa in qualsiasi momento le tue schede di allenamento e il tuo storico completo in PDF puliti e professionali."
         }
     ]
 };
