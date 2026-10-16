@@ -67,12 +67,9 @@ export default function App() {
     }, []);
 
     useEffect(() => {
+        // Registra silenziosamente la versione dell'app senza mostrare popup all'avvio
         try {
-            const lastSeen = localStorage.getItem("onlygym_last_seen_version");
-            if (lastSeen !== APP_VERSION) {
-                setShowChangelog(true);
-                localStorage.setItem("onlygym_last_seen_version", APP_VERSION);
-            }
+            localStorage.setItem("onlygym_last_seen_version", APP_VERSION);
         } catch (e) {
             console.debug("Version check skipped:", e);
         }
