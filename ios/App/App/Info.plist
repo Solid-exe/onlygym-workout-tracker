@@ -47,5 +47,18 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.onlygym.app</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.onlygym.app</string>
+				<string>onlygym</string>
+				<string>com.myspotter.pump</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

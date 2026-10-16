@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useStore } from "../lib/store";
 import { supabase } from "../lib/supabase";
 import PasswordStrengthMeter from "../components/PasswordStrengthMeter";
+import { startGoogleAuth } from "../services/googleAuth";
+import { Browser } from "@capacitor/browser";
 
 // Icona SVG ufficiale di Google
 const GoogleIcon = () => (
@@ -23,6 +25,21 @@ export default function Register() {
     const [error, setError] = useState("");
     const [showPassword, setShowPassword] = useState(false);
 
+    // Ascolta chiusura del browser esterno per ripristinare lo stato del bottone
+    useEffect(() => {
+        let listenerHandle = null;
+        try {
+            Browser.addListener('browserFinished', () => {
+                setGoogleLoading(false);
+            }).then(handle => { listenerHandle = handle; }).catch(() => {});
+        } catch {
+            // Not supported
+        }
+        return () => {
+            if (listenerHandle) listenerHandle.remove();
+        };
+    }, []);
+
     // Stato OTP
     const [otpCode, setOtpCode] = useState("");
     const [otpTimer, setOtpTimer] = useState(0);
@@ -33,21 +50,14 @@ export default function Register() {
         setError("");
         setGoogleLoading(true);
         try {
-            const { error: oauthError } = await supabase.auth.signInWithOAuth({
-                provider: 'google',
-                options: {
-                    redirectTo: `${window.location.origin}/auth/callback`,
-                    queryParams: {
-                        access_type: 'offline',
-                        prompt: 'consent',
-                    }
-                }
-            });
-            if (oauthError) throw oauthError;
+            await startGoogleAuth();
         } catch (err) {
             console.error('Google register error:', err);
             setError(err.message || "Errore durante la registrazione con Google");
-            setGoogleLoading(false);
+        } finally {
+            setTimeout(() => {
+                setGoogleLoading(false);
+            }, 3500);
         }
     };
 

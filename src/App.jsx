@@ -28,6 +28,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import InstallPrompt from "./components/InstallPrompt";
 import AuthCallback from "./pages/AuthCallback";
 import GymCodeSetup from "./pages/GymCodeSetup";
+import DeepLinkHandler from "./components/DeepLinkHandler";
 import { useStore } from "./lib/store";
 import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
@@ -42,11 +43,27 @@ export default function App() {
     useEffect(() => {
         // Inizializza Google AdMob
         admobService.initialize();
+
+        // Sincronizza lo stato No-Ads dall'account Supabase
+        const syncAdFree = (user) => {
+            if (user?.user_metadata?.is_ad_free) {
+                admobService.setAdFreeStatus(true);
+            }
+        };
+
+        supabase.auth.getUser().then(({ data: { user } }) => syncAdFree(user));
+        const { data: { subscription: authSub } } = supabase.auth.onAuthStateChange((_, session) => {
+            syncAdFree(session?.user);
+        });
+
         // Applica tema sbloccato dal Battle Pass
         applyEquippedTheme();
         const handleCustomization = () => applyEquippedTheme();
         window.addEventListener("onlygym:customization-changed", handleCustomization);
-        return () => window.removeEventListener("onlygym:customization-changed", handleCustomization);
+        return () => {
+            window.removeEventListener("onlygym:customization-changed", handleCustomization);
+            authSub?.unsubscribe();
+        };
     }, []);
 
     useEffect(() => {
@@ -119,6 +136,9 @@ export default function App() {
 
     return (
         <BrowserRouter>
+            {/* Deep link listener for OAuth and external return URLs */}
+            <DeepLinkHandler />
+
             {/* Splash Screen Overlay */}
             {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
 

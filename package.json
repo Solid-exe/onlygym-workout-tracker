@@ -7,11 +7,14 @@
         "dev": "vite",
         "build": "vite build",
         "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "postinstall": "node scripts/patch-android-security.js"
     },
     "dependencies": {
         "@capacitor-community/admob": "^8.2.1",
         "@capacitor/android": "^8.0.2",
+        "@capacitor/app": "^8.1.2",
+        "@capacitor/browser": "^8.0.5",
         "@capacitor/cli": "^8.0.2",
         "@capacitor/core": "^8.0.2",
         "@capacitor/ios": "^8.0.2",

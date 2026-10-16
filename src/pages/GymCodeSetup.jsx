@@ -13,8 +13,8 @@ export default function GymCodeSetup() {
     const [pendingData, setPendingData] = useState(null);
 
     useEffect(() => {
-        // Recupera i dati temporanei salvati da AuthCallback
-        const raw = sessionStorage.getItem('google_auth_pending');
+        // Recupera i dati temporanei salvati da AuthCallback (prova sessionStorage e localStorage)
+        const raw = sessionStorage.getItem('google_auth_pending') || localStorage.getItem('google_auth_pending');
         if (!raw) {
             // Nessun dato pendente, torna al login
             navigate("/login");
@@ -25,7 +25,7 @@ export default function GymCodeSetup() {
         } catch {
             navigate("/login");
         }
-    }, []);
+    }, [navigate]);
 
     const handleConfirm = async () => {
         setError("");
@@ -37,6 +37,7 @@ export default function GymCodeSetup() {
             const { data: { session }, error: sessionError } = await supabase.auth.getSession();
             if (sessionError || !session) {
                 sessionStorage.removeItem('google_auth_pending');
+                localStorage.removeItem('google_auth_pending');
                 navigate("/login");
                 return;
             }
@@ -69,6 +70,7 @@ export default function GymCodeSetup() {
 
             // Pulisci dati temporanei
             sessionStorage.removeItem('google_auth_pending');
+            localStorage.removeItem('google_auth_pending');
 
             // Popola lo store con la sessione aggiornata
             loginFromServer({
@@ -200,6 +202,7 @@ export default function GymCodeSetup() {
                 <button
                     onClick={() => {
                         sessionStorage.removeItem('google_auth_pending');
+                        localStorage.removeItem('google_auth_pending');
                         supabase.auth.signOut();
                         navigate("/login");
                     }}

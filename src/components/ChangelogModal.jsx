@@ -1,8 +1,8 @@
-export const APP_VERSION = "3.2.0";
+export const APP_VERSION = "3.2.1";
 
 export const CHANGELOG_DATA = {
     version: APP_VERSION,
-    title: "Novità dell'Aggiornamento v3.2.0",
+    title: "Novità dell'Aggiornamento v3.2.1",
     summary: "Ecco le ultime novità e miglioramenti apportati a OnlyGym per rendere la tua esperienza di allenamento ancora più sicura, veloce e performante.",
     features: [
         {

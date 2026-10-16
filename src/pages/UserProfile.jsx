@@ -8,7 +8,6 @@ export default function UserProfile() {
     const navigate = useNavigate();
     const { userProfile: myProfile } = useStore(); // Current user (Admin/Trainer)
     const [profile, setProfile] = useState(null);
-    const [badges, setBadges] = useState([]);
     const [userPlans, setUserPlans] = useState([]); // Plans allocated to this user
     const [isFollowing, setIsFollowing] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -37,15 +36,7 @@ export default function UserProfile() {
         }
         setProfile(userData);
 
-        // 2. Fetch Badges
-        const { data: userBadges } = await supabase
-            .from('achievements')
-            .select('*')
-            .eq('user_id', userId)
-            .order('weight_achieved', { ascending: false });
-        setBadges(userBadges || []);
-
-        // 3. Fetch Follow Status
+        // 2. Fetch Follow Status
         if (user && user.id !== userId) {
             const { data: followData } = await supabase
                 .from('follows')
@@ -112,20 +103,6 @@ export default function UserProfile() {
             setUserPlans(prev => prev.filter(p => p.id !== planId));
             alert("Scheda eliminata correttamente.");
         }
-    };
-
-    const getBadgeEmoji = (level) => {
-        switch (level) {
-            case 'bronze': return '🥉';
-            case 'silver': return '🥈';
-            case 'gold': return '🥇';
-            case 'platinum': return '💎';
-            default: return '🏅';
-        }
-    };
-
-    const getBadgeName = (type) => {
-        return type.charAt(0).toUpperCase() + type.slice(1);
     };
 
     if (loading) return (
@@ -197,15 +174,7 @@ export default function UserProfile() {
             </div>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-3 gap-3 mb-8">
-                <div className="bg-white border border-slate-200 rounded-3xl p-5 text-center shadow-sm relative overflow-hidden group">
-                    <div className="absolute -right-2 -top-2 opacity-5 group-hover:opacity-10 transition-opacity">
-                        <span className="material-symbols-outlined text-[64px]">trophy</span>
-                    </div>
-                    <span className="material-symbols-outlined text-amber-500 text-[28px] mb-2" style={{ fontVariationSettings: "'FILL' 1" }}>trophy</span>
-                    <p className="text-3xl font-black italic tracking-tighter text-slate-900 mb-1">{badges.length}</p>
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Badge</p>
-                </div>
+            <div className="grid grid-cols-2 gap-3 mb-8">
                 <div className="bg-white border border-slate-200 rounded-3xl p-5 text-center shadow-sm relative overflow-hidden group">
                     <div className="absolute -right-2 -top-2 opacity-5 group-hover:opacity-10 transition-opacity">
                         <span className="material-symbols-outlined text-[64px]">fitness_center</span>
@@ -281,46 +250,6 @@ export default function UserProfile() {
                 </div>
             )}
 
-            {/* Badges Collection */}
-            <div className="mb-5 ml-2">
-                <h3 className="text-2xl font-black text-slate-900 uppercase italic tracking-tighter flex items-center gap-2">
-                    <span className="material-symbols-outlined text-amber-500 text-[28px]" style={{ fontVariationSettings: "'FILL' 1" }}>workspace_premium</span> Bacheca Trofei
-                </h3>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-[36px]">Traguardi raggiunti</p>
-            </div>
-
-            {badges.length === 0 ? (
-                <div className="text-center py-16 bg-white rounded-3xl border border-slate-200 border-dashed flex flex-col items-center justify-center shadow-inner">
-                    <span className="material-symbols-outlined text-[48px] text-slate-300 mb-3 block">sentiment_dissatisfied</span>
-                    <p className="text-slate-500 font-black uppercase tracking-widest text-[10px]">Nessun badge sbloccato ancora.</p>
-                </div>
-            ) : (
-                <div className="grid grid-cols-2 gap-4">
-                    {badges.map(badge => (
-                        <div key={badge.id} className="bg-white border border-slate-200 p-5 rounded-3xl flex flex-col items-center text-center shadow-sm relative overflow-hidden group hover:border-amber-200 transition-colors">
-                            <div className="absolute top-0 right-0 p-2 opacity-5 group-hover:opacity-10">
-                                <span className="material-symbols-outlined text-[48px]">workspace_premium</span>
-                            </div>
-                            <div className="text-4xl filter drop-shadow-md mb-3 group-hover:scale-110 transition-transform">
-                                {getBadgeEmoji(badge.level)}
-                            </div>
-                            <div>
-                                <p className="font-black italic uppercase tracking-tighter text-slate-900 text-sm">
-                                    {getBadgeName(badge.badge_type)}
-                                </p>
-                                <div className="inline-flex items-center justify-center gap-1 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-100 text-amber-700 mt-2 mb-2">
-                                    <span className="material-symbols-outlined text-[10px]">fitness_center</span>
-                                    <span className="text-[10px] font-black uppercase tracking-widest">{badge.weight_achieved} kg</span>
-                                </div>
-                                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest flex items-center justify-center gap-1">
-                                    <span className="material-symbols-outlined text-[10px]">history</span>
-                                    {new Date(badge.achieved_at).toLocaleDateString('it-IT')}
-                                </p>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
         </div>
     );
 }

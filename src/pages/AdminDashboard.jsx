@@ -682,7 +682,7 @@ export default function AdminDashboard() {
                 ...templateData,
                 name: `${template.name} - Copia`
             }).select();
-            
+
             if (error) throw error;
             if (data && data[0]) {
                 setTemplates(prev => [data[0], ...prev]);
@@ -900,8 +900,8 @@ export default function AdminDashboard() {
                 return (
                     <div className="space-y-4 animate-in fade-in">
                         <div className="bg-white p-6 pb-2 rounded-t-2xl border-x border-t border-slate-200 mx-px mt-px -mb-4 relative z-10 before:absolute before:content-[''] before:left-0 before:top-0 before:w-full before:h-1 before:bg-gradient-to-r before:from-primary before:to-amber-400 before:rounded-t-xl opacity-100">
-                             <h2 className="text-2xl font-black italic text-slate-900 uppercase tracking-tighter">Schede Assegnate</h2>
-                             <p className="text-slate-500 text-xs font-bold uppercase tracking-wider mt-1">Monitora i workout dei tuoi atleti</p>
+                            <h2 className="text-2xl font-black italic text-slate-900 uppercase tracking-tighter">Schede Assegnate</h2>
+                            <p className="text-slate-500 text-xs font-bold uppercase tracking-wider mt-1">Monitora i workout dei tuoi atleti</p>
                         </div>
 
                         {/* ── Sezione Schede in Scadenza ─────────────────────────── */}
@@ -917,8 +917,8 @@ export default function AdminDashboard() {
                                         const urgency = d <= 1
                                             ? { bg: 'bg-red-50', badge: 'bg-red-100 text-red-700 border-red-300', label: d <= 0 ? 'SCADUTA' : '⚠️ DOMANI', icon: 'error' }
                                             : d <= 3
-                                            ? { bg: 'bg-orange-50', badge: 'bg-orange-100 text-orange-700 border-orange-300', label: `${d} GIORNI`, icon: 'schedule' }
-                                            : { bg: 'bg-amber-50', badge: 'bg-amber-100 text-amber-700 border-amber-300', label: `${d} GIORNI`, icon: 'calendar_today' };
+                                                ? { bg: 'bg-orange-50', badge: 'bg-orange-100 text-orange-700 border-orange-300', label: `${d} GIORNI`, icon: 'schedule' }
+                                                : { bg: 'bg-amber-50', badge: 'bg-amber-100 text-amber-700 border-amber-300', label: `${d} GIORNI`, icon: 'calendar_today' };
                                         return (
                                             <div key={plan.id} className={`${urgency.bg} px-5 py-4 flex items-center justify-between gap-4`}>
                                                 <div className="flex items-center gap-3">
@@ -993,7 +993,7 @@ export default function AdminDashboard() {
                                                         </span>
                                                     ) : (
                                                         <span className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase text-slate-500 bg-slate-50 px-2.5 py-1 rounded border border-slate-200 tracking-wider">
-                                                           <span className="w-2 h-2 rounded-full bg-slate-300"></span> Mai usata
+                                                            <span className="w-2 h-2 rounded-full bg-slate-300"></span> Mai usata
                                                         </span>
                                                     )}
                                                 </td>
@@ -1027,7 +1027,7 @@ export default function AdminDashboard() {
                                 >
                                     ✨ Genera con AI
                                 </button>
-                                <button onClick={() => navigate('/plans/new?isTemplate=true')} 
+                                <button onClick={() => navigate('/plans/new?isTemplate=true')}
                                     className="bg-primary text-white px-5 py-2.5 font-black rounded-xl text-xs uppercase tracking-wider flex items-center gap-2 hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-md shadow-primary/20">
                                     <span className="material-symbols-outlined text-[18px]">add</span> Nuovo Modello
                                 </button>
@@ -1049,17 +1049,17 @@ export default function AdminDashboard() {
                                             {new Date(tpl.created_at).toLocaleDateString()}
                                         </div>
                                         <div className="flex items-center gap-3">
-                                            <button onClick={() => handleDuplicateTemplate(tpl)} 
+                                            <button onClick={() => handleDuplicateTemplate(tpl)}
                                                 className="text-slate-400 hover:text-blue-500 flex items-center gap-1 text-[10px] uppercase font-black transition-colors" title="Copia Modello">
                                                 <span className="material-symbols-outlined text-[14px]">content_copy</span>
                                                 Copia
                                             </button>
-                                            <button onClick={() => navigate(`/plans/new?tplId=${tpl.id}&isTemplate=true`)} 
+                                            <button onClick={() => navigate(`/plans/new?tplId=${tpl.id}&isTemplate=true`)}
                                                 className="text-primary hover:text-primary/70 flex items-center gap-1 text-[10px] uppercase font-black transition-colors">
                                                 <span className="material-symbols-outlined text-[14px]">edit</span>
                                                 Modifica
                                             </button>
-                                            <button onClick={() => handleDeleteTemplate(tpl.id, tpl.name)} 
+                                            <button onClick={() => handleDeleteTemplate(tpl.id, tpl.name)}
                                                 className="text-slate-400 hover:text-red-500 flex items-center gap-1 text-[10px] uppercase font-black transition-colors" title="Elimina Modello">
                                                 <span className="material-symbols-outlined text-[14px]">delete</span>
                                             </button>
@@ -1316,14 +1316,14 @@ export default function AdminDashboard() {
                                     <p className="text-xs text-slate-500 font-bold mt-1">I nuovi utenti dovranno inserire questo codice per potersi registrare all&apos;app</p>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <input 
-                                        type="text" 
-                                        value={gymAccessCode} 
+                                    <input
+                                        type="text"
+                                        value={gymAccessCode}
                                         onChange={(e) => setGymAccessCode(e.target.value.toUpperCase())}
                                         placeholder="Caricamento..."
                                         className="bg-white border border-slate-200 rounded-xl p-3 text-xs font-black uppercase text-center w-36 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 shadow-sm"
                                     />
-                                    <button 
+                                    <button
                                         onClick={handleSaveGymCode}
                                         disabled={savingGymCode}
                                         className="bg-primary text-white text-xs font-black uppercase px-4 py-3 rounded-xl hover:bg-primary/95 transition-colors shadow-md shadow-primary/20 disabled:opacity-50 active:scale-95 transition-transform"
@@ -1351,8 +1351,8 @@ export default function AdminDashboard() {
                 return (
                     <div className="space-y-4 animate-in fade-in">
                         <div className="bg-white p-6 pb-2 rounded-t-2xl border-x border-t border-slate-200 mx-px mt-px -mb-4 relative z-10 before:absolute before:content-[''] before:left-0 before:top-0 before:w-full before:h-1 before:bg-gradient-to-r before:from-primary before:to-amber-400 before:rounded-t-xl opacity-100">
-                             <h2 className="text-2xl font-black italic text-slate-900 uppercase tracking-tighter">Feedback Utenti</h2>
-                             <p className="text-slate-500 text-xs font-bold uppercase tracking-wider mt-1">Idee, bug segnalati e supporto</p>
+                            <h2 className="text-2xl font-black italic text-slate-900 uppercase tracking-tighter">Feedback Utenti</h2>
+                            <p className="text-slate-500 text-xs font-bold uppercase tracking-wider mt-1">Idee, bug segnalati e supporto</p>
                         </div>
                         <div className="rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-sm relative z-0">
                             <div className="overflow-x-auto custom-scrollbar">
@@ -1368,7 +1368,7 @@ export default function AdminDashboard() {
                                     </thead>
                                     <tbody className="divide-y divide-slate-100">
                                         {feedbackList.map(fb => (
-                                            <tr key={fb.id} 
+                                            <tr key={fb.id}
                                                 onClick={async () => {
                                                     setSelectedFeedback(fb);
                                                     if (fb.status === 'new') {
@@ -1560,14 +1560,13 @@ export default function AdminDashboard() {
                                 <div className="border border-slate-100 rounded-2xl p-4 bg-slate-50">
                                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Anteprima</p>
                                     <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
-                                        <div className={`px-4 py-3 text-white text-xs font-black uppercase tracking-wider ${
-                                            broadcastForm.type === 'annuncio' ? 'bg-blue-500' :
+                                        <div className={`px-4 py-3 text-white text-xs font-black uppercase tracking-wider ${broadcastForm.type === 'annuncio' ? 'bg-blue-500' :
                                             broadcastForm.type === 'offerta' ? 'bg-orange-500' :
-                                            broadcastForm.type === 'avviso' ? 'bg-amber-500' : 'bg-emerald-500'
-                                        }`}>
+                                                broadcastForm.type === 'avviso' ? 'bg-amber-500' : 'bg-emerald-500'
+                                            }`}>
                                             {broadcastForm.type === 'annuncio' ? '📢 Annuncio' :
-                                             broadcastForm.type === 'offerta' ? '🎁 Offerta' :
-                                             broadcastForm.type === 'avviso' ? '⚠️ Avviso' : '✅ Novità'}
+                                                broadcastForm.type === 'offerta' ? '🎁 Offerta' :
+                                                    broadcastForm.type === 'avviso' ? '⚠️ Avviso' : '✅ Novità'}
                                         </div>
                                         <div className="p-4">
                                             <h3 className="font-black text-slate-900 text-sm uppercase">{broadcastForm.title || '–'}</h3>
@@ -1618,8 +1617,8 @@ export default function AdminDashboard() {
                                         const typeEmoji = b.type === 'annuncio' ? '📢' : b.type === 'offerta' ? '🎁' : b.type === 'avviso' ? '⚠️' : '✅';
                                         const typeColor = b.type === 'annuncio' ? 'bg-blue-50 text-blue-600 border-blue-200' :
                                             b.type === 'offerta' ? 'bg-orange-50 text-orange-600 border-orange-200' :
-                                            b.type === 'avviso' ? 'bg-amber-50 text-amber-700 border-amber-200' :
-                                            'bg-emerald-50 text-emerald-600 border-emerald-200';
+                                                b.type === 'avviso' ? 'bg-amber-50 text-amber-700 border-amber-200' :
+                                                    'bg-emerald-50 text-emerald-600 border-emerald-200';
                                         const targetLabel = b.target === 'all' ? '👥 Tutti' : b.target === 'clients' ? '🏋️ Clienti' : '🎓 Coach';
                                         const readCount = broadcastStats[b.id] || 0;
 
@@ -1799,7 +1798,7 @@ export default function AdminDashboard() {
                                     </span>
                                     <span className="text-[10px] font-bold text-slate-400">{new Date(selectedFeedback.created_at).toLocaleString()}</span>
                                 </div>
-                                
+
                                 <div>
                                     <p className="text-xs text-slate-400 uppercase tracking-wide font-bold">Mittente</p>
                                     <p className="text-sm font-bold text-slate-900 mt-0.5">{selectedFeedback.senderName}</p>
@@ -1835,7 +1834,7 @@ export default function AdminDashboard() {
                                     className={`px-4 rounded-xl border font-black uppercase text-[10px] tracking-wider transition-all active:scale-95 shadow-sm ${selectedFeedback.status === 'done'
                                         ? 'bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100'
                                         : 'bg-green-50 text-green-600 border-green-200 hover:bg-green-100'
-                                    }`}
+                                        }`}
                                 >
                                     {selectedFeedback.status === 'done' ? 'Riapri' : 'Risolvi'}
                                 </button>

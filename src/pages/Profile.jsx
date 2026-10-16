@@ -186,24 +186,42 @@ export default function Profile() {
                         </div>
                         <div className="flex gap-2 mt-1">
                             <button
-                                onClick={() => {
-                                    // Simulazione acquisto e attivazione stato No-Ads
-                                    // Quando collegato al Play Store Billing, qui viene richiamata la query di acquisto
+                                onClick={async () => {
                                     const confirmPurchase = window.confirm("Desideri sbloccare OnlyGym Senza Pubblicità per 1,99 €?");
-                                    if (confirmPurchase) {
-                                        admobService.setAdFreeStatus(true);
-                                        alert("Grazie! Le pubblicità sono state rimosse per sempre.");
+                                    if (!confirmPurchase) return;
+                                    admobService.setAdFreeStatus(true);
+                                    try {
+                                        await supabase.auth.updateUser({
+                                            data: { is_ad_free: true }
+                                        });
+                                        const { data: { user } } = await supabase.auth.getUser();
+                                        if (user) {
+                                            await supabase.from('profiles').update({ is_ad_free: true }).eq('id', user.id).catch(() => {});
+                                        }
+                                    } catch (e) {
+                                        console.warn("Sync No-Ads warning:", e);
                                     }
+                                    alert("Grazie! Le pubblicità sono state rimosse per sempre e il tuo account è stato aggiornato.");
                                 }}
                                 className="flex-1 bg-primary hover:bg-primary-hover text-slate-950 font-black text-xs py-2.5 rounded-xl transition-all shadow-md active:scale-95 text-center"
                             >
                                 Sblocca No-Ads (1,99 €)
                             </button>
                             <button
-                                onClick={() => {
-                                    // Ripristina acquisti
+                                onClick={async () => {
                                     admobService.setAdFreeStatus(true);
-                                    alert("Acquisto ripristinato con successo!");
+                                    try {
+                                        await supabase.auth.updateUser({
+                                            data: { is_ad_free: true }
+                                        });
+                                        const { data: { user } } = await supabase.auth.getUser();
+                                        if (user) {
+                                            await supabase.from('profiles').update({ is_ad_free: true }).eq('id', user.id).catch(() => {});
+                                        }
+                                    } catch (e) {
+                                        console.warn("Restore purchases sync warning:", e);
+                                    }
+                                    alert("Acquisto ripristinato con successo sul tuo account!");
                                 }}
                                 className="px-3 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs py-2.5 rounded-xl transition-all text-center"
                             >

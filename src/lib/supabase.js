@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { Capacitor } from '@capacitor/core'
 
 // ⚙️ CONFIGURAZIONE SUPABASE
 // Dopo aver creato il progetto su https://supabase.com
@@ -39,8 +40,12 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     auth: {
         persistSession: true,
         autoRefreshToken: true,
-        detectSessionInUrl: true,
-        storage: SafeStorage
+        // Su native Capacitor i token arrivano via deep link (@capacitor/app),
+        // mentre su Web window.location contiene i parametri del redirect
+        detectSessionInUrl: !Capacitor.isNativePlatform(),
+        storage: SafeStorage,
+        // Bypassa navigator.locks per prevenire deadlock/freeze all'infinito su Android WebView e Chromium
+        lock: async (_name, _acquireTimeout, fn) => await fn()
     }
 })
 

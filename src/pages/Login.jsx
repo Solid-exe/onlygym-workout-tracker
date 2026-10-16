@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../lib/store";
 import { supabase } from "../lib/supabase";
+import { startGoogleAuth } from "../services/googleAuth";
+import { Browser } from "@capacitor/browser";
 
 // Icona SVG ufficiale di Google
 const GoogleIcon = () => (
@@ -23,26 +25,34 @@ export default function Login() {
     const [googleLoading, setGoogleLoading] = useState(false);
     const [error, setError] = useState("");
 
+    // Ascolta chiusura del browser esterno per ripristinare lo stato del bottone
+    useEffect(() => {
+        let listenerHandle = null;
+        try {
+            Browser.addListener('browserFinished', () => {
+                setGoogleLoading(false);
+            }).then(handle => { listenerHandle = handle; }).catch(() => {});
+        } catch {
+            // Not supported
+        }
+        return () => {
+            if (listenerHandle) listenerHandle.remove();
+        };
+    }, []);
+
     const handleGoogleLogin = async () => {
         setError("");
         setGoogleLoading(true);
         try {
-            const { error: oauthError } = await supabase.auth.signInWithOAuth({
-                provider: 'google',
-                options: {
-                    redirectTo: `${window.location.origin}/auth/callback`,
-                    queryParams: {
-                        access_type: 'offline',
-                        prompt: 'consent',
-                    }
-                }
-            });
-            if (oauthError) throw oauthError;
-            // Il browser viene reindirizzato automaticamente — non serve altro
+            await startGoogleAuth();
         } catch (err) {
             console.error('Google login error:', err);
             setError(err.message || "Errore durante il login con Google");
-            setGoogleLoading(false);
+        } finally {
+            // Ripristina lo stato del bottone dopo 3.5s per evitare spinner infiniti in caso di ritorno rapido
+            setTimeout(() => {
+                setGoogleLoading(false);
+            }, 3500);
         }
     };
 
