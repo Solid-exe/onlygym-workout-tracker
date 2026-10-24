@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useStore } from "../lib/store";
 import { supabase } from "../lib/supabase";
-import AIGeneratorModal from "../components/AIGeneratorModal";
 
 export default function PlanEditor() {
     const navigate = useNavigate();
@@ -344,13 +343,6 @@ export default function PlanEditor() {
                     </h1>
                 </div>
                 <div className="flex gap-2">
-                    <button
-                        onClick={() => setShowAIModal(true)}
-                        className="text-[10px] font-black text-white bg-slate-800 hover:bg-slate-700 px-3 py-2 rounded-xl uppercase tracking-widest transition-colors border border-slate-600 shadow-sm flex items-center gap-1"
-                        title="Genera scheda con AI"
-                    >
-                        ✨ AI
-                    </button>
                     <button onClick={() => setShowCopyModal(true)} className="text-[10px] font-black text-slate-300 bg-card hover:bg-slate-800 px-3 py-2 rounded-xl uppercase tracking-widest hover:text-white transition-colors border border-border shadow-sm flex items-center gap-1">
                         <span className="material-symbols-outlined text-[14px]">inventory_2</span> Sfoglia
                     </button>
@@ -677,14 +669,6 @@ export default function PlanEditor() {
                 </div>
             )}
         </div>
-
-            {/* AI GENERATOR MODAL */}
-            {showAIModal && (
-                <AIGeneratorModal
-                    onClose={() => setShowAIModal(false)}
-                    onPlanGenerated={handleAIPlanGenerated}
-                />
-            )}
         </>
     );
 }

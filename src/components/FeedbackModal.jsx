@@ -128,15 +128,6 @@ export default function FeedbackModal({ onClose }) {
                         )}
                     </button>
                 </form>
-
-                <div className="mt-8 pt-6 border-t border-slate-100">
-                    <p className="text-center text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] mb-3">Oppure contattaci direttamente su</p>
-                    <div className="flex gap-3">
-                        <a href="https://wa.me/393427681514" target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-center gap-2 py-3 bg-[#25D366]/10 text-[#25D366] rounded-xl text-xs font-black uppercase tracking-widest transition-all hover:bg-[#25D366]/20 border border-[#25D366]/20 shadow-sm active:scale-95">
-                            <span className="material-symbols-outlined text-[18px]">forum</span> WhatsApp <span className="opacity-70 lowercase font-medium tracking-normal ml-1">+39 342 768 1514</span>
-                        </a>
-                    </div>
-                </div>
             </div>
         </div>
     );

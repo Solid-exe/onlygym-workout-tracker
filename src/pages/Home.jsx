@@ -269,15 +269,6 @@ export default function Home() {
                             </div>
                         </section>
             </main>
-
-            {/* Floating Chat */}
-            <button
-                onClick={() => navigate('/chat')}
-                className="fixed bottom-24 right-4 w-14 h-14 bg-primary text-slate-950 rounded-full shadow-lg shadow-primary/30 hover:scale-110 active:scale-95 transition-all z-50 flex items-center justify-center"
-            >
-                <span className="material-symbols-outlined text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>chat</span>
-            </button>
-
             {/* Feedback Modal */}
             {showFeedback && (
                 <FeedbackModal
