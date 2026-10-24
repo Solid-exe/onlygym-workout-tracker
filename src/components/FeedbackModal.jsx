@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { supabase } from "../lib/supabase";
+import emailjs from "@emailjs/browser";
 
 export default function FeedbackModal({ onClose }) {
     const [type, setType] = useState('bug');
@@ -14,6 +15,7 @@ export default function FeedbackModal({ onClose }) {
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) throw new Error("Utente non autenticato");
 
+            // 1. Salva sempre nel database Supabase come storico
             const { error } = await supabase.from('app_feedback').insert({
                 user_id: user.id,
                 type,
@@ -21,6 +23,32 @@ export default function FeedbackModal({ onClose }) {
             });
 
             if (error) throw error;
+
+            // 2. Invia notifica email tramite EmailJS
+            const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+            const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+            const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+            if (serviceId && templateId && publicKey) {
+                try {
+                    await emailjs.send(
+                        serviceId,
+                        templateId,
+                        {
+                            feedback_type: type === 'bug' ? 'BUG SEGNALATO 🐛' : type === 'idea' ? 'NUOVA IDEA 💡' : 'FEEDBACK GENERICO 💬',
+                            message: message,
+                            user_email: user.email || 'Email non disponibile',
+                            user_id: user.id,
+                            to_email: 'vittoriodisarno99@gmail.com',
+                            submitted_at: new Date().toLocaleString('it-IT')
+                        },
+                        publicKey
+                    );
+                } catch (emailErr) {
+                    console.warn('[FeedbackModal] Invio email fallito:', emailErr);
+                }
+            }
+
             setStatus('success');
             setTimeout(onClose, 2000);
         } catch (error) {
