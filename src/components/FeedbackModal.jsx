@@ -25,19 +25,22 @@ export default function FeedbackModal({ onClose }) {
             if (error) throw error;
 
             // 2. Invia notifica email tramite EmailJS
-            const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-            const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-            const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+            const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_8hshknk';
+            const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_li4owpc';
+            const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || '1cNkYNPNJm1VClecG';
 
             if (serviceId && templateId && publicKey) {
                 try {
+                    const typeLabel = type === 'bug' ? 'BUG SEGNALATO 🐛' : type === 'idea' ? 'NUOVA IDEA 💡' : 'FEEDBACK GENERICO 💬';
                     await emailjs.send(
                         serviceId,
                         templateId,
                         {
-                            feedback_type: type === 'bug' ? 'BUG SEGNALATO 🐛' : type === 'idea' ? 'NUOVA IDEA 💡' : 'FEEDBACK GENERICO 💬',
+                            feedback_type: typeLabel,
+                            title: typeLabel,
                             message: message,
                             user_email: user.email || 'Email non disponibile',
+                            name: user.email?.split('@')[0] || 'Atleta',
                             user_id: user.id,
                             to_email: 'vittoriodisarno99@gmail.com',
                             submitted_at: new Date().toLocaleString('it-IT')
