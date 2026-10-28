@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { useStore } from "../lib/store";
+import { isCoachOrAdmin } from "../utils/permissions";
 
 export default function UserProfile() {
     const { userId } = useParams();
     const navigate = useNavigate();
     const { userProfile: myProfile } = useStore(); // Current user (Admin/Trainer)
+    const isCoach = isCoachOrAdmin(myProfile);
     const [profile, setProfile] = useState(null);
     const [userPlans, setUserPlans] = useState([]); // Plans allocated to this user
     const [isFollowing, setIsFollowing] = useState(false);
@@ -123,9 +125,7 @@ export default function UserProfile() {
                         if (window.history.length > 2) {
                             navigate(-1);
                         } else {
-                            if (myProfile?.role === 'admin') navigate('/admin');
-                            else if (myProfile?.role === 'trainer' || myProfile?.role === 'coach') navigate('/coach');
-                            else navigate('/');
+                            navigate('/plans');
                         }
                     }}
                     className="w-10 h-10 flex items-center justify-center bg-white border border-slate-200 shadow-sm rounded-full text-slate-400 hover:text-slate-800 hover:bg-slate-50 transition-all active:scale-95"
@@ -166,7 +166,7 @@ export default function UserProfile() {
                 {!isMe && (
                     <button
                         onClick={handleFollow}
-                        className={`relative z-10 px-6 py-2.5 rounded-2xl text-xs font-black uppercase tracking-widest transition-all ${isFollowing ? 'bg-slate-100 text-slate-700 border border-slate-200' : 'bg-primary text-white shadow-lg shadow-primary/20 hover:bg-orange-600 active:scale-95'}`}
+                        className={`relative z-10 px-6 py-2.5 rounded-2xl text-xs font-black uppercase tracking-widest transition-all ${isFollowing ? 'bg-slate-100 text-slate-700 border border-slate-200' : 'bg-primary text-white shadow-lg shadow-primary/20 hover:bg-primary/90 text-slate-950 active:scale-95'}`}
                     >
                         {isFollowing ? 'Seguito ✓' : 'Segui Atleta +'}
                     </button>
@@ -194,7 +194,7 @@ export default function UserProfile() {
             </div>
 
             {/* Coach Actions: Assign Plan */}
-            {myProfile?.role === 'trainer' && !isMe && (
+            {isCoach && !isMe && (
                 <div className="mb-8 animate-in slide-in-from-bottom-4">
                     <button
                         onClick={() => navigate(`/plans/new?userId=${userId}`)}
@@ -206,7 +206,7 @@ export default function UserProfile() {
             )}
 
             {/* Admin/Coach Plans Management Section */}
-            {(userPlans.length > 0 && (isMe || myProfile?.role === 'admin' || myProfile?.role === 'trainer')) && (
+            {(userPlans.length > 0 && (isMe || isCoach)) && (
                 <div className="mb-10 animate-in slide-in-from-bottom-6 duration-500">
                     <div className="flex justify-between items-end mb-5 ml-2">
                         <div>
@@ -235,7 +235,7 @@ export default function UserProfile() {
                                         </p>
                                     </div>
                                 </div>
-                                {myProfile?.role === 'trainer' && (
+                                {isCoach && (
                                     <button
                                         onClick={() => handleDeletePlan(plan.id, plan.name)}
                                         className="w-10 h-10 flex items-center justify-center bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-sm active:scale-95 border border-red-100"

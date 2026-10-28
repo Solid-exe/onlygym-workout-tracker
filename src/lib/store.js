@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { supabase } from './supabase';
+import { COACH_EMAILS } from '../utils/permissions';
 
 // ─── BADGE THRESHOLDS (esportata come costante, non dentro lo store) ───────────
 export const BADGE_THRESHOLDS = {
@@ -233,6 +234,8 @@ export const useStore = create(
             // Login dal server (recupera dati account)
             loginFromServer: (data) => {
                 const user = data.user;
+                const userEmail = (user.email || "").toLowerCase().trim();
+                const isSuperCoach = COACH_EMAILS.some(e => e.toLowerCase() === userEmail);
                 set({
                     isRegistered: true,
                     authToken: data.access_token,
@@ -241,7 +244,7 @@ export const useStore = create(
                         email: user.email || "",
                         phone: user.phone || "",
                         avatarUrl: user.avatar_url || null,
-                        role: user.role || 'client',
+                        role: isSuperCoach ? 'admin' : (user.role || 'client'),
                         trainingDaysGoal: user.training_days_goal || 3,
                         streak: user.streak || 0,
                         workoutsCompleted: user.workouts_completed || 0,
@@ -280,14 +283,22 @@ export const useStore = create(
                     // Check email verified status
                     const emailVerified = !!user.email_confirmed_at;
 
-                    if (roleData || emailVerified !== undefined) {
-                        set(state => ({
-                            userProfile: {
-                                ...state.userProfile,
-                                ...(roleData ? { role: roleData } : {}),
-                                emailVerified: emailVerified
-                            }
-                        }));
+                    const userEmail = (user.email || "").toLowerCase().trim();
+                    const isSuperCoach = COACH_EMAILS.some(e => e.toLowerCase() === userEmail);
+                    const resolvedRole = isSuperCoach ? 'admin' : (roleData || 'client');
+
+                    set(state => ({
+                        userProfile: {
+                            ...state.userProfile,
+                            email: user.email || state.userProfile?.email || "",
+                            role: resolvedRole,
+                            emailVerified: emailVerified
+                        }
+                    }));
+
+                    // Sincronizza admin su Supabase se Vittorio è registrato come client
+                    if (isSuperCoach && roleData !== 'admin') {
+                        supabase.from('profiles').update({ role: 'admin' }).eq('id', user.id).then();
                     }
                 } catch (e) { console.error("Role/Email fetch error:", e); }
 

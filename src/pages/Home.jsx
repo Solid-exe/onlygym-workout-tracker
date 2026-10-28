@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useStore } from "../lib/store";
 import { supabase } from "../lib/supabase";
 import FeedbackModal from "../components/FeedbackModal";
+import { isCoachOrAdmin } from "../utils/permissions";
 
 export default function Home() {
     const navigate = useNavigate();
@@ -31,7 +32,11 @@ export default function Home() {
                 navigate("/workout/active");
             }
         } else {
-            navigate("/plans/new");
+            if (isCoachOrAdmin(userProfile)) {
+                navigate("/plans/new");
+            } else {
+                navigate("/plans");
+            }
         }
     };
 
@@ -100,14 +105,14 @@ export default function Home() {
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                         <div className="absolute bottom-0 left-0 right-0 p-6 flex flex-col gap-1">
                             <span className="text-primary font-bold text-xs uppercase tracking-widest">
-                                {suggestedPlan ? 'Power Session' : 'Inizia'}
+                                {suggestedPlan ? 'Power Session' : (isCoachOrAdmin(userProfile) ? 'Nuovo Workout' : 'Inizia')}
                             </span>
                             <h4 className="text-white text-2xl font-bold mb-4">
-                                {suggestedPlan ? suggestedPlan.name.toUpperCase() : 'CREA LA TUA SCHEDA'}
+                                {suggestedPlan ? suggestedPlan.name.toUpperCase() : (isCoachOrAdmin(userProfile) ? 'CREA O ASSEGNA SCHEDA' : 'ATTENDI SCHEDA DAL COACH')}
                             </h4>
                             <button className="w-full bg-primary hover:bg-primary/90 text-slate-950 font-black py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2">
-                                <span>Inizia</span>
-                                <span className="material-symbols-outlined text-sm">play_arrow</span>
+                                <span>{suggestedPlan ? 'Inizia' : (isCoachOrAdmin(userProfile) ? 'Crea Scheda' : 'Vedi Schede')}</span>
+                                <span className="material-symbols-outlined text-sm">{suggestedPlan ? 'play_arrow' : 'arrow_forward'}</span>
                             </button>
                         </div>
                     </div>

@@ -5,6 +5,7 @@ node_modules/
 dist/
 dist_pure/
 .vercel/
+scratch/
 
 # Environment and sensitive keys
 .env
@@ -15,6 +16,8 @@ dist_pure/
 .DS_Store
 Thumbs.db
 *.log
+.vscode/
+.snyk
 
 # Android build and caches
 android/.gradle/

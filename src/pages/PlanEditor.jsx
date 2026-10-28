@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useStore } from "../lib/store";
 import { supabase } from "../lib/supabase";
+import { isCoachOrAdmin } from "../utils/permissions";
 
 export default function PlanEditor() {
     const navigate = useNavigate();
@@ -11,6 +12,7 @@ export default function PlanEditor() {
     const editId = searchParams.get('editId');
     const editTplId = searchParams.get('editTplId') || searchParams.get('tplId');
     const { addPlan, updatePlan, userProfile } = useStore();
+    const isCoach = isCoachOrAdmin(userProfile);
 
     const navigateAfterSave = () => {
         navigate("/plans");
@@ -22,31 +24,38 @@ export default function PlanEditor() {
 
     useEffect(() => {
         if (targetUserId) {
-            supabase.from('profiles').select('name').eq('id', targetUserId).single()
+            supabase.from('profiles').select('name, email').eq('id', targetUserId).single()
                 .then(({ data }) => {
-                    if (data) setTargetUserName(data.name);
+                    if (data) setTargetUserName(data.name || data.email);
                 });
         }
     }, [targetUserId]);
 
+    // Se un atleta normale prova a passare targetUserId, lo azzeriamo (può creare solo per se stesso)
     useEffect(() => {
-        if (!isTemplate && userProfile?.role && userProfile.role !== 'client') {
+        if (userProfile?.role !== undefined && !isCoach && targetUserId) {
+            setTargetUserId(null);
+            setTargetUserName(null);
+        }
+    }, [userProfile, isCoach, targetUserId]);
+
+    useEffect(() => {
+        if (!isTemplate && isCoach) {
             const fetchUsers = async () => {
-                if (userProfile.role === 'admin') {
-                    const { data } = await supabase.from('profiles').select('id, name').order('name');
-                    setAvailableAthletes(data || []);
-                } else if (userProfile.role === 'trainer') {
-                    const { data } = await supabase.from('coaching_requests').select('user_id').eq('trainer_id', userProfile.id);
-                    if (data && data.length > 0) {
-                        const ids = [...new Set(data.map(d => d.user_id))];
-                        const { data: athletes } = await supabase.from('profiles').select('id, name').in('id', ids).order('name');
-                        setAvailableAthletes(athletes || []);
-                    }
+                const { data: { user } } = await supabase.auth.getUser();
+                const { data } = await supabase
+                    .from('profiles')
+                    .select('id, name, email, role')
+                    .order('name');
+                if (data) {
+                    // Escludi se stesso dalla lista (ha già l'opzione 'Per Te Stesso')
+                    const athletes = data.filter(p => !user || p.id !== user.id);
+                    setAvailableAthletes(athletes);
                 }
             };
             fetchUsers();
         }
-    }, [isTemplate, userProfile]);
+    }, [isTemplate, isCoach]);
 
     useEffect(() => {
         const fetchExistingPlan = async () => {
@@ -296,6 +305,19 @@ export default function PlanEditor() {
         setActiveDayId(newDays[0]?.id || 'day-1');
     };
 
+    const handleDeleteTemplate = async (e, tplId, tplName) => {
+        e.stopPropagation();
+        if (!window.confirm(`Sei sicuro di voler eliminare definitivamente il modello "${tplName}" dall'archivio?`)) return;
+
+        const { error } = await supabase.from('workout_templates').delete().eq('id', tplId);
+        if (error) {
+            alert("Errore eliminazione: " + error.message);
+        } else {
+            setSavedTemplates(prev => prev.filter(t => t.id !== tplId));
+            alert(`✅ Modello "${tplName}" eliminato dall'archivio.`);
+        }
+    };
+
     const handleLoadTemplate = (tpl) => {
         if (window.confirm(`Vuoi sovrascrivere l'editor attuale con "${tpl.name}"?`)) {
             setName(tpl.name);
@@ -361,16 +383,25 @@ export default function PlanEditor() {
 
                     {isTemplate ? (
                         <span className="font-black text-xl italic tracking-tighter text-amber-500">Modello Pubblico (Archivio)</span>
-                    ) : (userProfile?.role === 'admin' || userProfile?.role === 'trainer') && !requestId ? (
+                    ) : isCoach && !requestId ? (
                         <select
                             value={targetUserId || ""}
-                            onChange={(e) => setTargetUserId(e.target.value || null)}
+                            onChange={(e) => {
+                                const val = e.target.value || null;
+                                setTargetUserId(val);
+                                const found = availableAthletes.find(a => a.id === val);
+                                setTargetUserName(found ? (found.name || found.email) : null);
+                            }}
                             className="bg-transparent font-black italic tracking-tighter text-xl text-primary outline-none cursor-pointer w-full border-b-2 border-dashed border-primary/30 pb-1 appearance-none"
                         >
-                            <option value="" className="text-slate-900 not-italic">👩‍💻 Per Te Stesso</option>
-                            {availableAthletes.map(a => (
-                                <option key={a.id} value={a.id} className="text-slate-900 not-italic">👤 {a.name}</option>
-                            ))}
+                            <option value="" className="text-slate-900 not-italic">👩‍💻 Scheda Personale (Per Te Stesso)</option>
+                            <optgroup label="Assegna a un Atleta">
+                                {availableAthletes.map(a => (
+                                    <option key={a.id} value={a.id} className="text-slate-900 not-italic">
+                                        👤 {a.name || 'Atleta'} ({a.email})
+                                    </option>
+                                ))}
+                            </optgroup>
                         </select>
                     ) : (
                         <span className={`font-black italic tracking-tighter text-xl ${targetUserId ? 'text-primary' : 'text-slate-900'}`}>
@@ -646,10 +677,23 @@ export default function PlanEditor() {
                             {savedTemplates.map(tpl => (
                                 <div key={tpl.id} className="bg-white border border-slate-200 p-5 rounded-2xl flex flex-col gap-4 group shadow-sm hover:shadow-md transition-shadow">
                                     <div className="flex justify-between items-start">
-                                        <h3 className="font-black text-slate-900 text-lg uppercase italic tracking-tighter">{tpl.name}</h3>
-                                        <span className="bg-primary/10 border border-primary/20 text-primary !text-[10px] px-2.5 py-1 rounded-md uppercase font-black tracking-widest shadow-sm">{tpl.days || 'N/A'}</span>
+                                        <div className="flex-1 mr-3">
+                                            <h3 className="font-black text-slate-900 text-lg uppercase italic tracking-tighter">{tpl.name}</h3>
+                                            <p className="text-xs text-slate-500 font-bold mt-1">{tpl.description}</p>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <span className="bg-primary/10 border border-primary/20 text-primary !text-[10px] px-2.5 py-1 rounded-md uppercase font-black tracking-widest shadow-sm">{tpl.days || 'N/A'}</span>
+                                            {isCoach && (
+                                                <button
+                                                    onClick={(e) => handleDeleteTemplate(e, tpl.id, tpl.name)}
+                                                    className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                                                    title="Elimina modello"
+                                                >
+                                                    <span className="material-symbols-outlined text-[18px]">delete</span>
+                                                </button>
+                                            )}
+                                        </div>
                                     </div>
-                                    <p className="text-xs text-slate-500 font-bold">{tpl.description}</p>
                                     <button
                                         onClick={() => handleLoadTemplate(tpl)}
                                         className="w-full mt-2 bg-slate-50 border border-slate-200 text-slate-600 text-[10px] font-black uppercase tracking-[0.2em] py-3 rounded-xl hover:bg-primary hover:text-white hover:border-primary transition-colors shadow-sm active:scale-[0.98] flex items-center justify-center gap-2"
